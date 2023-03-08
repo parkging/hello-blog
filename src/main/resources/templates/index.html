@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/head :: frag_head}"></head>
+<body>
+<div class="">
+  <div th:replace="~{fragment/header :: frag_header}"></div>
+  <div th:replace="~{fragment/nav :: frag_nav}"></div>
+
+  <div th:replace="~{fragment/section :: frag_section(~{::#boarder})}">
+      <div id="boarder" th:replace="~{fragment/board :: board('전체 글', 22)}"></div>
+  </div>
+  <footer th:replace="~{fragment/footer :: frag_footer}"></footer>
+</div>
+</body>
+<script>
+    // fetchPage("/sidemenu-category", "frag_category");
+    // fetchPage("/boarder", "frag_boarder");
+</script>
+</html>

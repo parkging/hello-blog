@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+  <div class="" th:fragment="viewer">
+    <form id="postForm" class="container" action="/post/add" method="post" th:object="${postForm}">
+      <div class="row" >
+        <div class="row w-100 mt-4 d-flex" >
+          <div class="col flex-fill">
+            <input type="hidden" id="postId" th:field="${postForm.postId}">
+          </div>
+          <div class="col">
+            <p th:text="${postForm.categoryFullName}">일상/여행</p>
+          </div>
+          <div class="col d-flex justify-content-end" th:if="${session.loginMember}">
+            <button type="button" class="btn btn-secondary" th:onclick="|location.href='@{{postId}/edit(postId=${postForm.postId})}'|">수정하기</button>
+          </div>
+        </div>
+
+        <div class="row w-100 d-flex d-none">
+
+          <div th:style="|background-image: url('data:${postForm.based64ThumbnailImage?.contentType};base64,${postForm.based64ThumbnailImage?.based64ImgContent}');|"></div>
+  <!--        <img th:src="'data:' + ${postForm.based64ThumbnailImage?.contentType} + ';base64,' + ${postForm.based64ThumbnailImage?.based64ImgContent}">-->
+          <hr class="mt-2">
+        </div>
+
+        <div class="row w-100 d-flex">
+          <h2 th:text="${postForm.title}"></h2>
+          <p class="text-muted fw-light" style="font-size: 14px; height: 20px" th:text="'박깅이 · '+${#temporals.format(postForm?.createdDate, 'yyyy-MM-dd')}"></p>
+          <hr class="mt-2">
+        </div>
+      </div>
+
+      <div class="row w-100 d-flex " style="min-height: 450px">
+
+        <div class="col flex-fill">
+
+          <!-- 토스트 UI 에디터 코어 -->
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+          <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+          <!-- 토스트 UI 에디터 플러그인, 컬러피커 -->
+          <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css" />
+          <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css" />
+          <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+
+          <!-- 토스트 UI 에디터 플러그인, 코드 신텍스 하이라이터 -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css">
+          <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
+          <div class="" id="viewer" th:field="${postForm.content}"></div>
+          <script type="text/javascript" th:inline="javascript">
+
+              const { Editor } = toastui;
+              const { codeSyntaxHighlight } = Editor.plugin;
+
+              const viewer = new toastui.Editor.factory({
+                  el: document.querySelector('#viewer'),
+                  viewer: true,
+                  height: 'auto',
+                  plugins: [codeSyntaxHighlight],
+                  initialValue: [[${postForm.content}]]
+              });
+
+          </script>
+        </div>
+      </div>
+
+  </form>
+
+    <script type="text/javascript" th:inline="javascript">
+    </script>
+
+  </div>
+</div>
+
+
+
+
+</body>
+</html>

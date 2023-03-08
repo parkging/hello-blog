@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/head :: frag_head}"></head>
+<body>
+
+<div id="frag_side_menu" class="col-md-3 sol-sm-0 mt-4 " th:fragment="frag_side_menu">
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <!--        <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>-->
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body container">
+
+      <div th:replace="fragment/profile :: frag_profile"></div>
+      <div th:replace="fragment/category :: frag_category_navi"></div>
+    </div>
+  </div>
+
+  <div class="container d-none d-lg-block ">
+
+      <div th:replace="fragment/profile :: frag_profile"></div>
+      <div th:replace="fragment/category :: frag_category"></div>
+
+    </div>
+    <script th:inline="javascript">
+    </script>
+  </div>
+</div>
+</body>
+</html>

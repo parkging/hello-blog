@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+  <div class="" th:fragment="editor">
+    <form id="postForm" class="container" enctype="multipart/form-data"
+          th:object="${postForm}"
+          th:action="${postId}? @{'/post/'+ ${postId}+'/update'} : @{'/post/0/add'}"
+          action="/post/add" method="post" >
+      <div class="row w-100 my-4 d-flex" >
+        <div class="col flex-fill">
+          <input type="hidden" id="postId" th:field="${postForm.postId}">
+        </div>
+        <div class="col flex-fill">
+          <label class="form-label" for="title">카테고리</label>
+        </div>
+        <div class="col flex-fill">
+          <select class="form-select" aria-label="Default select example" id="category" th:field="${postForm.categoryId}">
+            <option selected value="">카테고리를 선택하세요</option>
+            <option th:each="categoryForm : ${categoryForms}"
+                    th:value="${categoryForm.id}"
+                    th:disabled="${categoryForm.hasChild}?true:false"
+                    th:selected="${categoryForm.id eq postForm.categoryId}"
+                    th:text="${categoryForm.parentId ge 1 ? '&nbsp;'+categoryForm.name : categoryForm.name}">
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row w-100 d-flex">
+        <div class="col flex-fill">
+          <label class="form-label" for="title">제목</label>
+        </div>
+        <div class="col flex-fill">
+          <input class="form-control" type="text" id="title" th:field="${postForm.title}">
+        </div>
+      </div>
+
+      <div class="row w-100 my-4 d-flex">
+        <div class="col flex-fill">
+          <label class="form-label" for="thumbnailImage"></label>
+        </div>
+        <div class="col flex-fill">
+          <input class="form-control" type="file" id="thumbnailImage" th:field="${postForm.thumbnailImage}">
+        </div>
+        <div class="col flex-fill">
+          <label class="form-label" th:text="${postForm.thumbnailImage?.name}">
+        </div>
+      </div>
+
+      <div class="row w-100 d-flex ">
+        <div class="col flex-fill">
+          <label class="form-label" for="editor">내용</label>
+        </div>
+
+        <div class="col flex-fill">
+
+          <!-- 토스트 UI 에디터 코어 -->
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+          <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+          <!-- 토스트 UI 에디터 플러그인, 컬러피커 -->
+          <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css" />
+          <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css" />
+          <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+
+          <!-- 토스트 UI 에디터 플러그인, 코드 신텍스 하이라이터 -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css">
+          <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
+          <div class="" id="editor" th:field="${postForm?.content}"></div>
+          <script type="text/javascript" th:inline="javascript">
+
+              const { Editor } = toastui;
+              const { codeSyntaxHighlight } = Editor.plugin;
+
+              const editor = new Editor({
+                  el: document.querySelector('#editor'),
+                  Type: 'markdown',
+                  previewStyle: 'tab',
+                  height: 'auto',
+                  plugins: [codeSyntaxHighlight],
+                  initialValue: [[${postForm?.content?:""}]]
+              });
+
+              editor.getMarkdown();
+
+          </script>
+        </div>
+      </div>
+
+      <div class="row w-100 my-2 ">
+        <div class="d-flex flex-row justify-content-end ">
+          <div class=" me-2">
+            <button type="button" onclick="save()" class="btn border border-primary">저장</button>
+          </div>
+          <div class=" me-2">
+            <button type="button" onclick="saveTemp()" class="btn border border-warning">임시저장</button>
+          </div>
+          <div class=" me-2">
+            <button type="button"  onclick="cancel();" class="btn border border-danger">취소</button>
+          </div>
+        </div>
+      </div>
+
+  </form>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        function save() {
+
+            let hiddenField = document.createElement('input');
+            hiddenField.setAttribute('type', 'hidden');
+            hiddenField.setAttribute('name', 'content');
+            hiddenField.setAttribute('value', editor.getMarkdown());
+
+            postForm.appendChild(hiddenField);
+            postForm.submit();
+
+        }
+        function save_back() {
+
+            let postId = document.getElementById("postId").value;
+            let category = document.getElementById("category");
+            let categoryId = category.options[category.selectedIndex].value;
+            let title = document.getElementById("title").value;
+            let thumbnailImage = document.getElementById("thumbnailImage");
+            let content = editor.getMarkdown();
+
+            let params = new Map();
+            params.set("postId", postId);
+            params.set("categoryId", categoryId);
+            params.set("title", title);
+            params.set("content", content);
+
+            if(thumbnailImage.files.length > 0) {
+                params.set("thumbnailImage", thumbnailImage.files[0]);
+                // params.set("thumbnailImage", thumbnailImage);
+            }
+
+            let url = postId?"/post/"+postId+"/update" : "/post/0/add";
+
+            sendPostMultipart(url, params);
+
+
+        }
+        function saveTemp() {
+            alert("saveTemp");
+        }
+        function cancel() {
+            history.back();
+        }
+    </script>
+
+  </div>
+</div>
+
+
+
+
+</body>
+</html>

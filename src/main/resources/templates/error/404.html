@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title th:text="${status}+'-Error'">00-Error</title>
+
+  <link rel="stylesheet" href="/css/sign-in.css">
+  <div th:replace="~{fragment/head :: frag_head}"></div>
+
+</head>
+<body class="text-center bg-dark p-2 text-dark bg-opacity-10">
+
+<main class="w-100 m-auto" style="width: 900px">
+  <h1 class="h3 mb-3 fw-normal" th:text="'페이지를 찾을 수 없습니다.'"></h1>
+  <h1 class="h3 mb-3 fw-normal" th:text="${message}"></h1>
+</main>
+</body>
+</html>

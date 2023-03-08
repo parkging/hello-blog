@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head :: frag_head_args(~{::title},~{::link})">
+  <meta charset="UTF-8">
+  <title>tui-editor-test</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+  <link rel="script" href="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"/>
+</head>
+<body>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+<div id="editor"></div>
+<script type="text/javascript">
+    const Editor = toastui.Editor;
+    const editor = new Editor({
+        el: document.querySelector('#editor'),
+        height: '500px',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical'
+    });
+
+    editor.getMarkdown();
+</script>
+
+</body>
+</html>

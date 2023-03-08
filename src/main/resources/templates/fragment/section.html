@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<section class="container" th:fragment="frag_section(content)">
+
+  <div class="row">
+    <div class="col-lg-9 col-md-12" id="content">
+      <div th:replace="${content}"></div>
+    </div>
+    <div th:replace="~{fragment/side-menu :: frag_side_menu}"></div>
+  </div>
+
+</section>
+</body>
+</html>

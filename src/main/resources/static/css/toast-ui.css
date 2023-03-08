@@ -1,0 +1,11 @@
+/*.toastui-editor-contents p {*/
+/*  font-size: 15px;*/
+/*}*/
+
+.toastui-editor-contents {
+  font-size: 16px !important;
+}
+
+.ProseMirror {
+  font-size: 15px !important;
+}

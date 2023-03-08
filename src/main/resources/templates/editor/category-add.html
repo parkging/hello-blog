@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/head :: frag_head}"></head>
+<body>
+<div th:replace="~{fragment/header :: frag_header}"></div>
+<div th:replace="~{fragment/nav :: frag_nav}"></div>
+
+<div th:replace="~{fragment/section :: frag_section(~{::#addCategoryFrag})}">
+
+  <form action="/category/add" method="post" th:object="${categoryForm}" id="addCategoryFrag"
+        class="d-flex flex-column justify-content-center align-items-center h-100 bg-dark text-dark bg-opacity-10" >
+    <div class="form-floating d-flex flex-row align-items-center w-50">
+      <input type="text" class="form-control" id="categoryName" placeholder="카테고리명" th:field="*{name}" th:errorclass="border-danger"/>
+      <input type="hidden" id="parentId" th:field="*{parentId}">
+      <label class="" for="categoryName" style="width: 165px">카테고리 이름</label>
+      <button class="btn btn-sm btn-outline-primary mx-1 w-25 h-100">추가</button>
+    </div>
+    <div class="text-danger" th:errors="*{name}">에러내용</div>
+  </form>
+
+</div>
+
+<footer th:replace="~{fragment/footer :: frag_footer}"></footer>
+</body>
+</html>
