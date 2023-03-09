@@ -24,52 +24,47 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class PostService {
 
+    public static final int DO_NOTHING = 0;
+    public static final int DO_CREATE = 1;
+    public static final int DO_UPDATE = 2;
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final ThumbnailRepository thumbnailRepository;
 
-    public Post findById(Long postId) {
-        return postRepository.findById(postId).orElse(null);
-    }
-
     @Transactional
     public Post save(Long categoryId, String title, String content, BASE64DecodedMultipartFile based64ThumbnailImage) throws IOException {
-
-        Category category = categoryRepository.findById(categoryId).orElse(null);
-
-        if(category == null) {
-            throw new NoSuchElementException("카테고리가 존재하지 않습니다");
-        }
-
+        Category category = getCategoryWithValidate(categoryId);
         Post savedPost = postRepository.save(Post.builder()
-                .title(title)
-                .content(content)
-                .category(category)
-                .preview(getPreview(content))
-                .build());
+                                    .title(title)
+                                    .content(content)
+                                    .category(category)
+                                    .preview(getPreview(content))
+                                    .build());
 
         saveThumbnail(based64ThumbnailImage, savedPost);
 
         return savedPost;
     }
+
     @Transactional
     public Long update(Long postId, Long categoryId, String title, String content, BASE64DecodedMultipartFile based64ThumbnailImage) throws IOException {
 
-        Category category = categoryRepository.findById(categoryId).orElse(null);
-        if(category == null) {
-            throw new NoSuchElementException("카테고리가 존재하지 않습니다");
-        }
-
-        Post post = postRepository.findById(postId).orElse(null);
-        if(post == null) {
-            throw new NoSuchElementException("포스트가 존재하지 않습니다");
-        }
-
+        Category category = getCategoryWithValidate(categoryId);
+        Post post = getPostWithValidate(postId);
         post.update(category, title, content, getPreview(content));
-
         saveThumbnail(based64ThumbnailImage, post);
 
-        return postId;
+        return post.getId();
+    }
+
+    @Transactional
+    public void deleteById(Long postId) {
+        thumbnailRepository.deleteByPostId(postId);
+        postRepository.deleteById(postId);
+    }
+
+    public Post findById(Long postId) {
+        return getPostWithValidate(postId);
     }
 
     public List<PostPreview> findAll(Pageable pageable) {
@@ -88,40 +83,79 @@ public class PostService {
         return postRepository.findAllByCategory(category, pageable);
     }
 
-    @Transactional
-    public void deleteById(Long postId) {
-
-        thumbnailRepository.deleteByPostId(postId);
-        postRepository.deleteById(postId);
-    }
+    //********************************************//
 
     private void saveThumbnail(BASE64DecodedMultipartFile based64ThumbnailImage, Post post) throws IOException {
 
-        if(based64ThumbnailImage != null && based64ThumbnailImage.getSize() == 0) {
-             based64ThumbnailImage = null;
-        }
+        based64ThumbnailImage = initBase64DecodedMultipartFile(based64ThumbnailImage);
         Thumbnail thumbnail = thumbnailRepository.findByPost(post).orElse(null);
+        int modifyCase = getModifiyCase(based64ThumbnailImage, thumbnail);
 
-        if(based64ThumbnailImage == null && thumbnail == null) {
-            //do-nothing.
-        } else if(based64ThumbnailImage == null && thumbnail != null) {
-            //do-nothing.
-//            thumbnailRepository.deleteById(thumbnail.getId());
-        } else if(based64ThumbnailImage != null && thumbnail == null) {
-            thumbnail = new Thumbnail(based64ThumbnailImage.getOriginalFilename(), based64ThumbnailImage.getOriginalFilename(),
-                    based64ThumbnailImage.getContentType(), based64ThumbnailImage.getBased64ImgContent(), post);
-            thumbnailRepository.save(thumbnail);
-        } else if(based64ThumbnailImage != null && thumbnail != null){
-            thumbnail.setImage(based64ThumbnailImage.getBased64ImgContent());
-            thumbnail.setName(based64ThumbnailImage.getOriginalFilename());
-            thumbnail.setOriginalFilename(based64ThumbnailImage.getOriginalFilename());
-            thumbnail.setContentType(based64ThumbnailImage.getContentType());
+        switch (modifyCase) {
+            case DO_NOTHING:
+                break;
+
+            case DO_CREATE:
+                thumbnailRepository.save(new Thumbnail(based64ThumbnailImage.getOriginalFilename(),
+                                                        based64ThumbnailImage.getOriginalFilename(),
+                                                        based64ThumbnailImage.getContentType(),
+                                                        based64ThumbnailImage.getBased64ImgContent(),
+                                                        post));
+                break;
+
+            case DO_UPDATE:
+                thumbnail.update(based64ThumbnailImage.getBased64ImgContent(),
+                                    based64ThumbnailImage.getOriginalFilename(),
+                                    based64ThumbnailImage.getOriginalFilename(),
+                                    based64ThumbnailImage.getContentType());
+                break;
+
+            default:
+                break;
+
         }
-
     }
 
-    private static String getPreview(String content) {
+    private String getPreview(String content) {
         return content.substring(0, content.length() < 100 ? content.length() : 100)
                 + (content.length() < 100 ? "" : "...");
+    }
+
+    private Category getCategoryWithValidate(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+
+        if(category == null) {
+            throw new NoSuchElementException("카테고리가 존재하지 않습니다");
+        }
+        return category;
+    }
+
+    private Post getPostWithValidate(Long postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        if(post == null) {
+            throw new NoSuchElementException("포스트가 존재하지 않습니다");
+        }
+        return post;
+    }
+
+    private static BASE64DecodedMultipartFile initBase64DecodedMultipartFile(BASE64DecodedMultipartFile based64ThumbnailImage) {
+        if(based64ThumbnailImage != null && based64ThumbnailImage.getSize() == 0) {
+            based64ThumbnailImage = null;
+        }
+        return based64ThumbnailImage;
+    }
+
+    private int getModifiyCase(Object source, Object target) {
+        int modifyCase = DO_NOTHING;
+        if(source == null && target == null) {
+            modifyCase = DO_NOTHING;
+        } else if(source == null && target != null) {
+            modifyCase = DO_NOTHING;
+        } else if (source != null && target == null) {
+            modifyCase = DO_CREATE;
+        } else if (source != null && target != null) {
+            modifyCase = DO_UPDATE;
+        }
+        return modifyCase;
     }
 }

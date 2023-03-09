@@ -23,19 +23,18 @@ public class CategoryService {
 
     @Transactional
     public Long addCategory(String name, Long parentId) {
-        Category newCategory = Category.builder()
-                .name(name)
-                .build();
+        Category category = Category.builder().name(name).build();
+        addParentIsNotNull(category, parentId);
 
-        if(parentId != null) {
-            Category parent = categoryRepository.findById(parentId).orElse(null);
-            if(parent == null) {
-                throw new NoParentCategoryException("상위 카테고리가 존재하지 않습니다.");
-            }
-            parent.addChild(newCategory);
-        }
+        return categoryRepository.save(category).getId();
+    }
 
-        return categoryRepository.save(newCategory).getId();
+    @Transactional
+    public void deleteCategory(Long id) {
+        Category category = getCategoryWithValidate(id);
+        Long postCnt = getPostCntWithValidate(category);
+
+        categoryRepository.delete(category);
     }
 
     public Category findById(Long categoryId) {
@@ -49,10 +48,17 @@ public class CategoryService {
     public List<Category> findByAll() {
         return categoryRepository.findAll();
     }
+    private void addParentIsNotNull(Category category, Long parentId) {
+        if(parentId != null) {
+            Category parent = categoryRepository.findById(parentId).orElse(null);
+            if(parent == null) {
+                throw new NoParentCategoryException("상위 카테고리가 존재하지 않습니다.");
+            }
+            parent.addChild(category);
+        }
+    }
 
-    @Transactional
-    public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElse(null);
+    private static void validateCategory(Category category) {
         if(category == null) {
             throw new NoCategoryException("카테고리가 존재하지 않습니다");
         }
@@ -60,14 +66,20 @@ public class CategoryService {
         if(category.getChild().size() > 0) {
             throw new HasChildCategoryException("하위 카테고리가 존재합니다.");
         }
+    }
 
+    private Category getCategoryWithValidate(Long id) {
+        Category category = categoryRepository.findById(id).orElse(null);
+        validateCategory(category);
+        return category;
+    }
+
+    private Long getPostCntWithValidate(Category category) {
         Long postCnt = postRepository.countByCategory(category);
-
         if(postCnt > 0) {
             throw new PostExistException("하위 포스트가 존재합니다.");
         }
-
-        categoryRepository.delete(category);
+        return postCnt;
     }
 
 

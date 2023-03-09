@@ -2,16 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/head :: frag_head_args(~{::title},~{::link})">
   <meta charset="UTF-8">
-  <title>글쓰기</title>
-  <!-- 토스트 UI 에디터 코어 -->
-  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
-  <link rel="script" href="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"/>
-
-  <!-- 토스트 UI 에디터 플러그인, 코드 신텍스 하이라이터 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
-  <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css">
-  <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
-
+  <title th:text="${postForm.title}">글쓰기</title>
+  <link>
 </head>
 <body>
   <div th:replace="~{fragment/header :: frag_header}"></div>

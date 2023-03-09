@@ -19,7 +19,7 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
-    @Setter(AccessLevel.PROTECTED)
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private Category parent;

@@ -25,42 +25,17 @@ public class BoarderService {
 
     public BoardForm getBoardForm(String categoryName, Pageable pageable) {
 
-        List<PostPreview> postPreviews;
-        Long postCount;
-        String boardName;
-
-        if (categoryName == null) {
-            postPreviews = postService.findAll(pageable);
-            postCount = postService.countBy();
-            boardName = "전체 글";
-        } else {
-            Category category = categoryService.findByName(categoryName);
-            postPreviews = postService.findAllByCategory(category, pageable);
-            postCount = postService.countByCategory(category);
-            boardName = category.getName();
-
-        }
-
-        List<PostPreviewForm> posts = new ArrayList<>();
-
-        for (PostPreview postPreview : postPreviews) {
-
-            posts.add(PostPreviewForm.builder()
-                    .postId(postPreview.getId())
-                    .title(postPreview.getTitle())
-                    .categoryFullName(getCategoryFullName(postPreview.getCategory().getName(), postPreview))
-                    .preview(postPreview.getPreview())
-                    .createdDate(postPreview.getCreatedDate())
-                    .based64ThumbnailImage(getBased64ThumbnailImage(postPreview))
-                    .build());
-        }
+        List<PostPreview> postPreviews = getPostPreviews(categoryName, pageable);
+        Long postCount = getPostCount(categoryName);
+        String boardName = getBoardName(categoryName);
+        List<PostPreviewForm> posts = getPostPreviewForms(postPreviews);
 
         int currentPage = getCurrentPage(pageable);    //현재페이지
         int pageSize = getPageSize(pageable);
         int startPage = getStartPage(currentPage, pageSize);
         int endPage = getEndPage(pageSize, startPage, postCount);
 
-        BoardForm boardForm = BoardForm.builder()
+        return BoardForm.builder()
                 .name(boardName)
                 .postCount(postCount)
                 .posts(posts)
@@ -69,11 +44,9 @@ public class BoarderService {
                 .endPage(endPage)
                 .pageSize(pageSize)
                 .build();
-
-        return boardForm;
     }
 
-    private static String getCategoryFullName(String categoryName, PostPreview postPreview) {
+    private String getCategoryFullName(String categoryName, PostPreview postPreview) {
         Category parent = postPreview.getCategory().getParent();
         String categoryFullName = "" + categoryName;
         if(parent != null) {
@@ -82,22 +55,22 @@ public class BoarderService {
         return categoryFullName;
     }
 
-    private static int getEndPage(int pageSize, int startPage, Long postCount) {
+    private int getEndPage(int pageSize, int startPage, Long postCount) {
         int endPage = startPage + pageSize - 1;
         int maxPage = (int) (((postCount - 1) / pageSize) + 1);
 
         return (endPage < maxPage) ? endPage : maxPage;
     }
 
-    private static int getStartPage(int currentPage, int pageSize) {
+    private int getStartPage(int currentPage, int pageSize) {
         return ((currentPage - 1) / pageSize) * pageSize + 1;
     }
 
-    private static int getPageSize(Pageable pageable) {
+    private int getPageSize(Pageable pageable) {
         return pageable.getPageSize();
     }
 
-    private static int getCurrentPage(Pageable pageable) {
+    private int getCurrentPage(Pageable pageable) {
         return pageable.getPageNumber() + 1;
     }
 
@@ -110,4 +83,38 @@ public class BoarderService {
         }
         return based64ThumbnailImage;
     }
+
+    private Category getCategory(String categoryName) {
+        return categoryName==null?null:categoryService.findByName(categoryName);
+    }
+
+    private List<PostPreview> getPostPreviews(String categoryName, Pageable pageable) {
+        return categoryName==null?postService.findAll(pageable):postService.findAllByCategory(getCategory(categoryName), pageable);
+    }
+
+    private Long getPostCount(String categoryName) {
+        return categoryName==null?postService.countBy():postService.countByCategory(getCategory(categoryName));
+    }
+
+    private String getBoardName(String categoryName) {
+        return categoryName==null?"전체 글":getCategory(categoryName).getName();
+    }
+
+    private List<PostPreviewForm> getPostPreviewForms(List<PostPreview> postPreviews) {
+        List<PostPreviewForm> posts = new ArrayList<>();
+
+        for (PostPreview postPreview : postPreviews) {
+            posts.add(PostPreviewForm.builder()
+                    .postId(postPreview.getId())
+                    .title(postPreview.getTitle())
+                    .categoryFullName(getCategoryFullName(postPreview.getCategory().getName(), postPreview))
+                    .preview(postPreview.getPreview())
+                    .createdDate(postPreview.getCreatedDate())
+                    .based64ThumbnailImage(getBased64ThumbnailImage(postPreview))
+                    .build());
+        }
+        return posts;
+    }
+
+
 }

@@ -13,19 +13,13 @@ public class Thumbnail {
     @GeneratedValue
     private Long id;
 
-    @Setter
     private String name;
-    @Setter
     private String originalFilename;
-    @Setter
     private String contentType;
-
-    @Setter
     @Lob
     private String image;
 
     /**
-     * 외래키를 POST에 둬야 했었다.. 후회막심 추후 수정예정
      * 외래키 삭제 예정
      */
 //    @OneToOne(cascade = CascadeType.REMOVE)
@@ -42,5 +36,15 @@ public class Thumbnail {
         this.image = image;
         this.post = post;
     }
+
+    public void update(String image, String name, String originalFilename, String contentType) {
+        this.image = image;
+        this.name = name;
+        this.originalFilename = originalFilename;
+        this.contentType = contentType;
+    }
+
+
+
 
 }

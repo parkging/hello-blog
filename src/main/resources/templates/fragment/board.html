@@ -16,12 +16,12 @@
       <div class="list-group" style="min-height: 500px">
 
         <a th:href="@{/post/{postId} (postId=${postForm?.postId})}"  href="#" class="list-group-item list-group-item-action" aria-current="true"
-        th:each="postForm:${boardForm?.posts}">
+        th:each="postForm:${boardForm?.posts}" >
 
           <div class="row">
-            <div class="col-9">
+            <div class="col-10" th:class="${postForm.based64ThumbnailImage}?'col-10':'col-12'">
               <small class="" th:text="${postForm?.categoryFullName}">일상/사진</small>
-              <div class="d-flex w-100 justify-content-between">
+              <div class="d-flex w-100 justify-content-between mb-1 mt-2">
                 <h5 class="mb-1" th:text="${postForm?.title}">아바시리 2023년 2월 1일</h5>
               </div>
               <p class="mb-1" th:text="${postForm?.preview}">아바시리에서 유빙선을 타도 막상 유빙이 없는 경우가 많다. 하지만 유빙을 못보는 대신 저~ 멀리 시레코토를 볼 수 있다. 유빙이 있으면 날씨가 좋지 않아 시레코토..</p>
@@ -30,9 +30,11 @@
               <small class="text-muted" th:text="${#temporals.format(postForm?.createdDate, 'yyyy-MM-dd')}">3 days ago</small>
 <!--              <small class="text-muted" th:text="${postForm.createTime}">3 days ago</small>-->
             </div>
-            <div class="col-3 d-flex justify-content-center" style="max-width: 200px">
+            <div class="col-2 d-flex justify-content-center" style="max-width: 160px; max-height: 160px"
+                 th:if="${postForm.based64ThumbnailImage}">
 
-              <img class="img-fluid" th:if="${postForm.based64ThumbnailImage}"
+              <img class="img-fluid" style="object-fit:scale-down"
+
                    th:src="'data:' + ${postForm?.based64ThumbnailImage?.contentType?:_} + ';base64,' + ${postForm?.based64ThumbnailImage?.based64ImgContent?:_}"
               >
 <!--              <img th:if="${postForm.based64ThumbnailImage}?:_"-->

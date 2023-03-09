@@ -2,7 +2,6 @@ package com.parkging.helloblog.service;
 
 import com.parkging.helloblog.domain.Member;
 import com.parkging.helloblog.repository.MemberRepository;
-import com.parkging.helloblog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,5 +1,6 @@
 * {
   font-family: 'Noto Sans KR', sans-serif;
+
   /*
   font-family: 'Gajraj One', cursive;
   border-collapse: collapse;
@@ -9,6 +10,18 @@
   list-style: none;
   */
 }
+
+#frag_header{
+  height: 50px !important;
+}
+#frag_section{
+  min-height: calc(100vh - 198px) !important;
+}
+#frag_footer{
+  height: 100px !important;
+  width: 100%;
+}
+
 /*
 header {
   background-color: antiquewhite;
