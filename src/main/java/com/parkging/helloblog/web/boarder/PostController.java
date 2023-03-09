@@ -32,7 +32,6 @@ public class PostController {
 
     private final CategoryService categoryService;
     private final PostService postService;
-
     private final ThumbnailRepository thumbnailRepository;
 
     @GetMapping("post/{postId}")
@@ -56,7 +55,6 @@ public class PostController {
                 .build();
 
         model.addAttribute("postForm", postForm);
-
 
         return "editor/post-viewer";
     }
@@ -116,6 +114,15 @@ public class PostController {
         return "redirect:/post/" + savedPostId + "/edit";
     }
 
+    @RequestMapping("post/{postId}/delete")
+    public String deletePost(@PathVariable Long postId) {
+
+        /*post 삭제 시 thumbnail도 같이 삭제됨*/
+        postService.deleteById(postId);
+
+        return "redirect:/";
+    }
+
     private static BASE64DecodedMultipartFile getBase64DecodedMultipartFile(MultipartFile multipartFile) throws IOException {
         MultipartFile thumbnailImage = multipartFile;
         BASE64DecodedMultipartFile based64ThumbnailImage = null;
@@ -128,15 +135,6 @@ public class PostController {
             based64ThumbnailImage = new BASE64DecodedMultipartFile(thumbnailImage.getBytes(), thumbnailImage.getName(), thumbnailImage.getOriginalFilename(), thumbnailImage.getContentType());
         }
         return based64ThumbnailImage;
-    }
-
-    @RequestMapping("post/{postId}/delete")
-    public String deletePost(@PathVariable Long postId) {
-
-        /*post 삭제 시 thumbnail도 같이 삭제됨*/
-        postService.deleteById(postId);
-
-        return "redirect:/";
     }
 
     private void addCategorys(Model model) {
