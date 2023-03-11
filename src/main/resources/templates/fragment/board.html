@@ -15,11 +15,13 @@
   <div class="row">
       <div class="list-group" style="min-height: 500px">
 
-        <a th:href="@{/post/{postId} (postId=${postForm?.postId})}"  href="#" class="list-group-item list-group-item-action" aria-current="true"
-        th:each="postForm:${boardForm?.posts}" >
+        <a th:href="@{/post/{postId} (postId=${postForm?.postId})}"  href="#" class="list-group-item list-group-item-action"
+           aria-current="true" th:each="postForm:${boardForm?.posts}"
+           style="min-height: 0px"
+        >
 
           <div class="row">
-            <div class="col-10" th:class="${postForm.based64ThumbnailImage}?'col-10':'col-12'">
+            <div class="col-8" th:class="${postForm.based64ThumbnailImage}?'col-9':'col-12'">
               <small class="" th:text="${postForm?.categoryFullName}">일상/사진</small>
               <div class="d-flex w-100 justify-content-between mb-1 mt-2">
                 <h5 class="mb-1" th:text="${postForm?.title}">아바시리 2023년 2월 1일</h5>
@@ -28,17 +30,12 @@
               <small class="text-muted" th:text="박깅이"></small>
               <small class="text-muted">·</small>
               <small class="text-muted" th:text="${#temporals.format(postForm?.createdDate, 'yyyy-MM-dd')}">3 days ago</small>
-<!--              <small class="text-muted" th:text="${postForm.createTime}">3 days ago</small>-->
             </div>
-            <div class="col-2 d-flex justify-content-center" style="max-width: 160px; max-height: 160px"
+            <div class="col-3 d-flex justify-content-center" style="width: 200px; height: 150px"
                  th:if="${postForm.based64ThumbnailImage}">
 
-              <img class="img-fluid" style="object-fit:scale-down"
-
-                   th:src="'data:' + ${postForm?.based64ThumbnailImage?.contentType?:_} + ';base64,' + ${postForm?.based64ThumbnailImage?.based64ImgContent?:_}"
-              >
-<!--              <img th:if="${postForm.based64ThumbnailImage}?:_"-->
-<!--                      class="img-fluid" alt="..." src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FQ7op3%2FbtrYY7sHaHI%2F8xFmOKvBvgM9nlBOviqEe1%2Fimg.jpg">-->
+              <img class="img-fluid" style="object-fit:cover"
+                   th:src="'data:' + ${postForm?.based64ThumbnailImage?.contentType?:_} + ';base64,' + ${postForm?.based64ThumbnailImage?.based64ImgContent?:_}">
             </div>
           </div>
         </a>

@@ -27,6 +27,7 @@ public class PostService {
     public static final int DO_NOTHING = 0;
     public static final int DO_CREATE = 1;
     public static final int DO_UPDATE = 2;
+    public static final int MAX_PREVIEW_SIZE = 130;
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final ThumbnailRepository thumbnailRepository;
@@ -117,8 +118,9 @@ public class PostService {
     }
 
     private String getPreview(String content) {
-        return content.substring(0, content.length() < 100 ? content.length() : 100)
-                + (content.length() < 100 ? "" : "...");
+        return content.replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9 .]", "")
+                .substring(0, content.length() < MAX_PREVIEW_SIZE ? content.length() : MAX_PREVIEW_SIZE)
+                + (content.length() < MAX_PREVIEW_SIZE ? "" : "...");
     }
 
     private Category getCategoryWithValidate(Long categoryId) {
