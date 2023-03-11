@@ -27,7 +27,7 @@ public class PostService {
     public static final int DO_NOTHING = 0;
     public static final int DO_CREATE = 1;
     public static final int DO_UPDATE = 2;
-    public static final int MAX_PREVIEW_SIZE = 130;
+    public static final int MAX_PREVIEW_SIZE = 100;
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final ThumbnailRepository thumbnailRepository;

@@ -21,7 +21,7 @@
         >
 
           <div class="row">
-            <div class="col-8" th:class="${postForm.based64ThumbnailImage}?'col-9':'col-12'">
+            <div class="col-9 col-sm-7" th:class="${postForm.based64ThumbnailImage}?'col-9':'col-12'">
               <small class="" th:text="${postForm?.categoryFullName}">일상/사진</small>
               <div class="d-flex w-100 justify-content-between mb-1 mt-2">
                 <h5 class="mb-1" th:text="${postForm?.title}">아바시리 2023년 2월 1일</h5>
@@ -31,10 +31,10 @@
               <small class="text-muted">·</small>
               <small class="text-muted" th:text="${#temporals.format(postForm?.createdDate, 'yyyy-MM-dd')}">3 days ago</small>
             </div>
-            <div class="col-3 d-flex justify-content-center" style="width: 200px; height: 150px"
+            <div class="col-3 d-flex justify-content-center" style="max-width: 200px"
                  th:if="${postForm.based64ThumbnailImage}">
 
-              <img class="img-fluid" style="object-fit:cover"
+              <img class="img-fluid" style="object-fit:contain"
                    th:src="'data:' + ${postForm?.based64ThumbnailImage?.contentType?:_} + ';base64,' + ${postForm?.based64ThumbnailImage?.based64ImgContent?:_}">
             </div>
           </div>
