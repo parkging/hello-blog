@@ -42,10 +42,17 @@
     </div>
     <div class="row">
       <div class="col-md-6"><button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button></div>
-      <div class="col-md-6"><button class="w-100 btn btn-lg btn-secondary" type="button" onclick="location.href='signin'">Sign In</button></div>
+      <div class="col-md-6"><button class="w-100 btn btn-lg btn-secondary" type="button"
+           onclick="location.href='signin'" th:onclick="signIn()">Sign In</button>
+      </div>
     </div>
     <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
   </form>
 </main>
+<script>
+  function signIn() {
+      alert("회원가입은 현재 지원하지 않습니다.")
+  }
+</script>
 </body>
 </html>

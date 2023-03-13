@@ -26,7 +26,7 @@
               <div class="d-flex w-100 justify-content-between mb-1 mt-2">
                 <h5 class="mb-1" th:text="${postForm?.title}">아바시리 2023년 2월 1일</h5>
               </div>
-              <p class="mb-1" th:text="${postForm?.preview}">아바시리에서 유빙선을 타도 막상 유빙이 없는 경우가 많다. 하지만 유빙을 못보는 대신 저~ 멀리 시레코토를 볼 수 있다. 유빙이 있으면 날씨가 좋지 않아 시레코토..</p>
+              <p class="mb-1" style="overflow: hidden;" th:text="${postForm?.preview}">아바시리에서 유빙선을 타도 막상 유빙이 없는 경우가 많다. 하지만 유빙을 못보는 대신 저~ 멀리 시레코토를 볼 수 있다. 유빙이 있으면 날씨가 좋지 않아 시레코토..</p>
               <small class="text-muted" th:text="박깅이"></small>
               <small class="text-muted">·</small>
               <small class="text-muted" th:text="${#temporals.format(postForm?.createdDate, 'yyyy-MM-dd')}">3 days ago</small>
