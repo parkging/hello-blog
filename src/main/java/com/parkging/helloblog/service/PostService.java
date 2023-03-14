@@ -118,10 +118,10 @@ public class PostService {
     }
 
     private String getPreview(String content) {
-        return content.replaceAll("\\!\\[.*?\\)", "")             //사진 링크 제거
+        String replacedContent = content.replaceAll("\\!\\[.*?\\)", "")             //사진 링크 제거
                 .replaceAll("\\<.*?\\>", "")                      //html테그 제거
-                .replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9 .]", "")    //특수문자 제거
-                .substring(0, content.length() < MAX_PREVIEW_SIZE ? content.length() : MAX_PREVIEW_SIZE)    //썸네일 글자수 제한
+                .replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9 .]", "");    //특수문자 제거
+        return replacedContent.substring(0, replacedContent.length() < MAX_PREVIEW_SIZE ? replacedContent.length() : MAX_PREVIEW_SIZE)    //썸네일 글자수 제한
                 + (content.length() < MAX_PREVIEW_SIZE ? "" : "...");
     }
 

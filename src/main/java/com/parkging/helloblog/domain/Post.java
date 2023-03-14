@@ -30,6 +30,10 @@ public class Post extends BaseTimeEntity {
 
     private String preview;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Builder
     public Post(String title, String content, Category category, String preview) {
         this.title = title;

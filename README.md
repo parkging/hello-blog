@@ -10,8 +10,6 @@
 * JUnit 4
 * GitHub(https://github.com/parkging/hello-blog)
  
- 개발 기획서 추가예정
- 
- 개발 과정 추가예정
+ 화면 설계서([링크](http://blog.parkging.com/post/56))
  
  개발이 진행됨에 따라 내용 추가 예정입니다.

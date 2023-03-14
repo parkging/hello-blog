@@ -22,7 +22,9 @@ public class BoarderController {
     private final BoarderService boarderService;
 
     @GetMapping("/boarder")
-    public String boarder(Model model, @PageableDefault(size = PAAGE_SIZE, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String boarder(Model model,
+                          @PageableDefault(size = PAAGE_SIZE, sort = "id",
+                                  direction = Sort.Direction.DESC) Pageable pageable) {
         BoardForm boardForm = boarderService.getBoardForm(null, pageable);
 
         model.addAttribute("boardForm", boardForm);
@@ -30,7 +32,9 @@ public class BoarderController {
     }
 
     @GetMapping("/boarder/{categoryName}")
-    public String boarder(@PathVariable String categoryName, Model model, @PageableDefault(size = PAAGE_SIZE, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String boarder(@PathVariable String categoryName, Model model,
+                          @PageableDefault(size = PAAGE_SIZE, sort = "id",
+                                  direction = Sort.Direction.DESC) Pageable pageable) {
         BoardForm boardForm = boarderService.getBoardForm(categoryName, pageable);
 
         model.addAttribute("boardForm", boardForm);
