@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-//    @Query("select p, m from Post p join p.member m")
+    //todo fetch join으로 수정
     List<PostViewDto> findPostAndMemberByPostCategory(PostCategory postCategory, Pageable pageable);
-//    @Query("select p, m from Post p join p.member m")
+    //todo fetch join으로 수정
     List<PostViewDto> findPostAndMemberBy(Pageable pageable);
     Optional<PostViewDto> findViewById(Long postId);
 
