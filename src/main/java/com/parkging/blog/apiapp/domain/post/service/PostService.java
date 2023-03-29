@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostService {
     public static final int MAX_PREVIEW_SIZE = 100;

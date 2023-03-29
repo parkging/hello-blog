@@ -12,7 +12,6 @@ import javax.persistence.NoResultException;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Slf4j
 public class MemberService {
 
@@ -41,6 +40,8 @@ public class MemberService {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new NoResultException("error.member.notexgist"));
     }
+
+    /************************비지니스 로직 분리************************/
 
     private void passwordValidationCheck(String password, String passwordConfirm) {
         if(!password.equals(passwordConfirm)) {
