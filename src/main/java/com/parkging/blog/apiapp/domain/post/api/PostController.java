@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,10 @@ public class PostController {
     public List<PostViewDto> findAll(@PageableDefault(size = PAGE_SIZE,
             sort = "id",
             direction = Sort.Direction.DESC)
-                                     Pageable pageable) {
+                                     Pageable pageable,
+                                     HttpServletResponse response
+    ) {
+        response.setHeader("X-Total-Count", Long.toString(postService.countAll()));
         return postService.findAll(pageable);
     }
 

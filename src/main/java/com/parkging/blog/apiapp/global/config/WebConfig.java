@@ -17,6 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000")
                 // 허용 HTTP method
                 .allowedMethods("GET", "POST", "FETCH", "DELETE")
+                // 모든 헤더값 참조 허용
+                .exposedHeaders("*")
                 // 쿠키 인증 요청 허용
                 .allowCredentials(true)
                 // pre-flight 리퀘스트 캐싱 시간
