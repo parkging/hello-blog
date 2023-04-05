@@ -81,6 +81,10 @@ public class PostService {
         return postRepository.count();
     }
 
+    public Long countBypostCategoryName(String postCategoryName) {
+        return postRepository.countByPostCategoryName(postCategoryName);
+    }
+
     /**********************************비지니스 로직 분리**********************************/
 
     private String getPreview(String content) {

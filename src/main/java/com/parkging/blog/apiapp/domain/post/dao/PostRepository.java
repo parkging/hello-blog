@@ -13,5 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<PostViewDto> findPostAndMemberByPostCategory(PostCategory postCategory, Pageable pageable);
     List<PostViewDto> findPostAndMemberBy(Pageable pageable);
     Optional<PostViewDto> findViewById(Long postId);
+    Long countByPostCategoryName(String postCategoryName);
 
 }

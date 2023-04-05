@@ -10,6 +10,7 @@ public interface PostViewDto {
     String getTitle();
     String getContent();
     String getPostCategoryName();
+    String getPostCategoryId();
     String getPreview();
     String getMemberName();
     String getThumbnailImageUrl();

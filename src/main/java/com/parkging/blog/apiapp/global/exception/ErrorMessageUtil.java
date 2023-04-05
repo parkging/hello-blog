@@ -47,14 +47,14 @@ public class ErrorMessageUtil {
 
     public ErrorResult getErrorResult(Exception e) {
         return ErrorResult.builder()
-                .code(getErrorCode(e))
+                .errorCode(getErrorCode(e))
                 .message(getErrorMessage(e))
                 .build();
     }
 
     public ErrorResult getErrorResult(Exception e, String redirectUrl) {
         return ErrorResult.builder()
-                .code(getErrorCode(e))
+                .errorCode(getErrorCode(e))
                 .message(getErrorMessage(e))
                 .redirectUrl(redirectUrl)
                 .build();
@@ -62,7 +62,7 @@ public class ErrorMessageUtil {
 
     public ErrorResult getErrorResult(String errorCode, String[] args, String redirectUrl) {
         return ErrorResult.builder()
-                .code(errorCode)
+                .errorCode(errorCode)
                 .message(getErrorMessage(errorCode, args))
                 .build();
     }
