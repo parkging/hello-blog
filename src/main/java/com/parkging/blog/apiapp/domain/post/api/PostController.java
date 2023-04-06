@@ -9,7 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,17 @@ public class PostController {
     public List<PostViewDto> findAll(@PageableDefault(size = PAGE_SIZE,
             sort = "id",
             direction = Sort.Direction.DESC)
-                                     Pageable pageable) {
-        return postService.findAll(pageable);
+                                     Pageable pageable,
+                                     HttpServletResponse response,
+                                     @RequestParam(required = false) String postCategoryName
+    ) {
+        if(StringUtils.isEmpty(postCategoryName)) {
+            response.setHeader("X-Total-Count", Long.toString(postService.countAll()));
+            return postService.findAll(pageable);
+        } else {
+            response.setHeader("X-Total-Count", Long.toString(postService.countBypostCategoryName(postCategoryName)));
+            return postService.findAllViewByCategoryName(postCategoryName, pageable);
+        }
     }
 
     @GetMapping("posts/{postId}")
@@ -42,14 +53,14 @@ public class PostController {
         return postService.findById(postId);
     }
 
-    @GetMapping("{categoryName}/posts")
-    public List<PostViewDto> findByCategoryName(@PathVariable(required = true) String categoryName,
-                                      @PageableDefault(size = PAGE_SIZE,
-                                       sort = "id",
-                                       direction = Sort.Direction.DESC)
-                               Pageable pageable) {
-        return postService.findAllViewByCategoryName(categoryName, pageable);
-    }
+//    @GetMapping("/posts")
+//    public List<PostViewDto> findByCategoryName(@PathVariable(required = true) String categoryName,
+//                                      @PageableDefault(size = PAGE_SIZE,
+//                                       sort = "id",
+//                                       direction = Sort.Direction.DESC)
+//                               Pageable pageable) {
+//        return postService.findAllViewByCategoryName(categoryName, pageable);
+//    }
 
     @PatchMapping("posts/{postId}")
     public Long updateById(@PathVariable(required = true) Long postId,

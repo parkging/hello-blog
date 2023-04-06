@@ -18,7 +18,9 @@ public class PostDto {
     @NotNull
     private Long postCategoryId;
     private String preview;
-    @NotNull
+
+    /*todo 로그인 기능 추가 후 NotNll 조건 추가 ; 로그인기능이 존재하지 않아 임시 주석 처리*/
+//    @NotNull
     private Long memberId;
 
     private String thumbnailImageUrl;
