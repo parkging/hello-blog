@@ -1,12 +1,14 @@
 package com.parkging.blog.apiapp.domain.member.api;
 
 import com.parkging.blog.apiapp.domain.member.domain.Member;
+import com.parkging.blog.apiapp.domain.member.domain.MemberRole;
 import com.parkging.blog.apiapp.domain.member.dto.LoginDto;
 import com.parkging.blog.apiapp.domain.member.dto.LoginResult;
 import com.parkging.blog.apiapp.domain.member.dto.MemberDto;
 import com.parkging.blog.apiapp.domain.member.dto.SginUpDto;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +17,15 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("members")
     public Long join(@RequestBody @Validated SginUpDto sginUpDto) {
         return memberService.join(sginUpDto.getName(),
                                 sginUpDto.getEmail(),
-                                sginUpDto.getPassword(),
-                                sginUpDto.getPasswordConfirm());
+                                bCryptPasswordEncoder.encode(sginUpDto.getPassword()),
+                                bCryptPasswordEncoder.encode(sginUpDto.getPasswordConfirm()),
+                                MemberRole.ROLE_USER);
     }
 
     @GetMapping("members/{memberId}")

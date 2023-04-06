@@ -2,9 +2,11 @@ package com.parkging.blog.apiapp.domain.member.service;
 
 import com.parkging.blog.apiapp.domain.member.dao.MemberRepository;
 import com.parkging.blog.apiapp.domain.member.domain.Member;
+import com.parkging.blog.apiapp.domain.member.domain.MemberRole;
 import com.parkging.blog.apiapp.domain.member.exception.LoginFailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long join(String name, String email, String password, String passwordConfirm) {
+    public Long join(String name, String email, String password, String passwordConfirm, MemberRole memberRole) {
         passwordValidationCheck(password, passwordConfirm);
         emailValidationCheck(email);
 
@@ -26,6 +28,7 @@ public class MemberService {
                 .name(name)
                 .email(email)
                 .password(password)
+                .memberRole(MemberRole.ROLE_USER)
                 .build()
             ).getId();
     }
@@ -38,6 +41,11 @@ public class MemberService {
 
     public Member findById(Long id) {
         return memberRepository.findById(id)
+                .orElseThrow(() -> new NoResultException("error.member.notexgist"));
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new NoResultException("error.member.notexgist"));
     }
 

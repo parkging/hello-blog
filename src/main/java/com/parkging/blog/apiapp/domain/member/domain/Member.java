@@ -27,10 +27,14 @@ public class Member {
     @NotNull
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
+
     @Builder
-    public Member(String name, String email, String password) {
+    public Member(String name, String email, String password, MemberRole memberRole) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.memberRole = memberRole;
     }
 }
