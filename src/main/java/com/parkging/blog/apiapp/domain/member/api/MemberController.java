@@ -55,6 +55,14 @@ public class MemberController {
                 .build();
     }
 
+    @PatchMapping("members/{memberId}")
+    public Long updateById(@PathVariable(required = true) Long memberId, @RequestBody MemberDto memberDto) {
+        return memberService.update(memberId,
+                            memberDto.getName(),
+                            bCryptPasswordEncoder.encode(memberDto.getPassword()),
+                            MemberRole.ROLE_USER);
+    }
+
     @DeleteMapping("certification")
     public void logout() {
         /* todo 로그아웃 기능 추가 필요 */
