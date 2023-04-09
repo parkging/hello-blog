@@ -1,4 +1,4 @@
-package com.parkging.blog.apiapp.global.config;
+package com.parkging.blog.apiapp.global.config.cors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,12 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowedOrigins(CorsProperties.ALLOWED_ORIGINS);
+        config.setExposedHeaders(CorsProperties.EXPOSED_HEADERS);
+        config.setAllowedHeaders(CorsProperties.ALLOWED_HEADERS);
+        config.setAllowedMethods(CorsProperties.ALLOWED_METHOD);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }
+

@@ -24,7 +24,7 @@ public class PrincipalDetails implements UserDetails {
                 return member.getMemberRole().toString();
             }
         });
-        return null;
+        return authorities;
     }
 
     @Override
@@ -35,6 +35,10 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public String getUsername() {
         return member.getEmail();
+    }
+
+    public Long getId() {
+        return this.member.getId();
     }
 
     @Override
