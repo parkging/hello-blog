@@ -4,6 +4,8 @@ import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.config.cors.CorsConfig;
 import com.parkging.blog.apiapp.global.config.jwt.JwtAuthenticationFilter;
 import com.parkging.blog.apiapp.global.config.jwt.JwtAuthorizationFilter;
+import com.parkging.blog.apiapp.global.config.jwt.JwtProperties;
+import com.parkging.blog.apiapp.global.config.jwt.JwtRevalidationFilter;
 import com.parkging.blog.apiapp.global.exception.ErrorMessageUtil;
 import com.parkging.blog.apiapp.global.filter.ExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
@@ -63,13 +65,20 @@ public class SecurityConfig {
 
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
-            jwtAuthenticationFilter.setUsernameParameter("email");
+            jwtAuthenticationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
+
+            JwtRevalidationFilter jwtRevalidationFilter = new JwtRevalidationFilter(authenticationManager, memberService);
+            jwtRevalidationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
+            jwtRevalidationFilter.setFilterProcessesUrl(JwtProperties.REFRESH_TOKEN_URL);
+
+            JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService);
 
             http
                     .addFilter(corsConfig.corsFilter())
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, memberService))
-                    .addFilterBefore(new ExceptionHandlerFilter(errorMessageUtil), UsernamePasswordAuthenticationFilter.class)
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilter(jwtRevalidationFilter)
+                    .addFilter(jwtAuthorizationFilter)
+                    .addFilterBefore(new ExceptionHandlerFilter(errorMessageUtil, memberService), UsernamePasswordAuthenticationFilter.class)
             ;
         }
     }

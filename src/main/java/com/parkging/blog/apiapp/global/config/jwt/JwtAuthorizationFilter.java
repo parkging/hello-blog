@@ -3,10 +3,8 @@ package com.parkging.blog.apiapp.global.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.parkging.blog.apiapp.domain.member.domain.Member;
-import com.parkging.blog.apiapp.domain.member.domain.MemberRole;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.auth.PrincipalDetails;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,20 +40,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING)
                 .replace(JwtProperties.TOKEN_PREFIX, "");
 
-        String userEmail = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build()
-                .verify(jwtToken)
-                .getClaim("email")
-                .asString();
+        String userEmail = JwtUtil.verifyToken(jwtToken, JwtProperties.JWT_SECRET);
 
         // 토큰 서명이 정상적으로 이루어짐
         if(userEmail != null) {
             Member findMember = memberService.findByEmail(userEmail);
-
-            PrincipalDetails principalDetails = new PrincipalDetails(findMember);
-
-            //Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체 생성
-            Authentication authentication =
-                    new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+            Authentication authentication = JwtUtil.getAuthentication(findMember);
 
             // 시큐리티 세션에 강제로 Authentication 객체 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
