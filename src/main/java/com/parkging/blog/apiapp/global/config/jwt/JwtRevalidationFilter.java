@@ -26,8 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Spring Security에 UsernamePasswordAuthenticationFilter가 존재
- * /login 요청 시 username, password 전송 (POST) 시 UsernamePasswordAuthenticationFilter 가 기본동작.
+ * POST로 /silent-refresh url 요청 시 동작
+ * refreshToken 검증 후 JWT 재발급하여 응답
+ * 갱신 실패 시 trhow RevalidationException 후 ExceptionHandlerFilter 에서 오류응답 처리.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -41,14 +42,13 @@ public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter 
      * @param response the response, which may be needed if the implementation has to do a
      * redirect as part of a multi-stage authentication process (such as OpenID).
      * @return Authentication
-     * @throws AuthenticationException
+     * @throws AuthenticationException | RevalidationException
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("JwtRevalidationFilter.attemptAuthentication");
 
         String refreshToken = JwtUtil.getRefreshTokenByCookies(request.getCookies());
-        log.info("refreshToken={}", refreshToken);
 
         //refreshToken 미존재 -> 재로그인 고지
         if(refreshToken == null) {
@@ -65,18 +65,6 @@ public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter 
                 Authentication authentication = JwtUtil.getAuthentication(findMember);
                 return authentication;
             }
-
-        } catch (SignatureVerificationException ex) {
-            log.info("JWT 갱신 실패", ex);
-            throw new RevalidationException(ex);
-
-        } catch (TokenExpiredException ex) {
-            log.info("JWT 갱신 실패", ex);
-            throw new RevalidationException(ex);
-
-        } catch (InvalidClaimException ex) {
-            log.info("JWT 갱신 실패", ex);
-            throw new RevalidationException(ex);
 
         } catch (JWTVerificationException ex) {
             log.info("JWT 갱신 실패", ex);

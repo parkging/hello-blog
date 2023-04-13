@@ -85,6 +85,19 @@ public class ErrorMessageUtil {
         }
     }
 
+    public void setErrorResponse(HttpServletResponse response, ErrorResult errorResult, HttpStatus httpStatus){
+        ObjectMapper objectMapper = new ObjectMapper();
+        response.setStatus(httpStatus.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=UTF-8");
+        try{
+            response.getWriter().write(objectMapper.writeValueAsString(errorResult));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

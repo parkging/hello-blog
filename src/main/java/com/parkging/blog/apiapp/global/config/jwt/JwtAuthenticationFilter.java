@@ -1,15 +1,11 @@
 package com.parkging.blog.apiapp.global.config.jwt;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkging.blog.apiapp.domain.member.domain.Member;
 import com.parkging.blog.apiapp.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,12 +16,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
- * Spring Security에 UsernamePasswordAuthenticationFilter가 존재
- * /login 요청 시 username, password 전송 (POST) 시 UsernamePasswordAuthenticationFilter 가 기본동작.
+ * POST로 /login url 요청 시 동작
+ * /login 요청 시 eamil, password 전송 (POST) 시 UsernamePasswordAuthenticationFilter 가 기본동작.
+ * email, pawssword 검증 후 response에 JWT를, cookie에 refreshToken을 담아서 응답.
+ * 검증 실패 시 throw AuthenticationException 후 ExceptionHandlerFilter 에서 오류 응답.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -84,12 +80,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        String jwtToken = JwtUtil.getJwtToken(principalDetails);
+        String jwt = JwtUtil.getJwtToken(principalDetails);
         String refreshToken = JwtUtil.getRefreshToken(principalDetails);
-        String cookie = JwtUtil.getCookie(refreshToken);
+        String refreshTokenCookie = JwtUtil.getRefreshTokenCookie(refreshToken);
+        String refreshTokenExpireTimeCookie = JwtUtil.getRefreshTokenExpireTimeCookie();
 
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
-        response.setHeader("Set-Cookie", cookie);
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwt);
+        response.setHeader("Set-Cookie", refreshTokenCookie);
+        response.addHeader("Set-Cookie", refreshTokenExpireTimeCookie);
     }
 
     /**

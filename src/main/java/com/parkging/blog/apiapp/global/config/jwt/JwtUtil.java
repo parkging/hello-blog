@@ -3,14 +3,11 @@ package com.parkging.blog.apiapp.global.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.parkging.blog.apiapp.domain.member.domain.Member;
-import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.auth.PrincipalDetails;
 import com.parkging.blog.apiapp.global.exception.RevalidationException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.Assert;
 
 import javax.servlet.http.Cookie;
 import java.sql.Timestamp;
@@ -19,10 +16,7 @@ import java.util.Arrays;
 
 import static com.parkging.blog.apiapp.global.config.jwt.JwtProperties.REFRESH_TOKEN_NAME;
 
-@RequiredArgsConstructor
 public final class JwtUtil {
-
-    private static final MemberService memberService = null;
 
     public static String getJwtToken(PrincipalDetails principalDetails) {
         return JWT.create()
@@ -30,6 +24,7 @@ public final class JwtUtil {
                 .withExpiresAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(JwtProperties.JWT_EXPIRATION_MINUTE)))
                 .withClaim("id", principalDetails.getId())
                 .withClaim("email", principalDetails.getUsername())
+                .withClaim("expire_millisecond", JwtProperties.JWT_EXPIRATION_MINUTE * 60 * 1000)
                 .sign(Algorithm.HMAC512(JwtProperties.JWT_SECRET));
     }
 
@@ -47,11 +42,11 @@ public final class JwtUtil {
         return Arrays.stream(cookies)
                 .filter(c -> c.getName().equals(REFRESH_TOKEN_NAME))
                 .findFirst()
-                .orElseGet(null)
+                .orElseThrow(() -> new RevalidationException())
                 .getValue();
     }
 
-    public static String getCookie(String refreshToken) {
+    public static String getRefreshTokenCookie(String refreshToken) {
         return ResponseCookie.from(JwtProperties.REFRESH_TOKEN_NAME, refreshToken)
                 .maxAge(JwtProperties.REF_EXPIRATION_MINUTE * 60)
                 .path("/")
@@ -62,9 +57,18 @@ public final class JwtUtil {
                 .toString();
     }
 
-    /**
-     * Throws:
-     */
+    //리프레시토큰 만료시간 쿠키 생성(httpOnly 아님); 해당 쿠키로 클라이언트에서 리프레시토큰 여부 확인
+    public static String getRefreshTokenExpireTimeCookie() {
+        return ResponseCookie.from(JwtProperties.REFRESH_EXPIRE_TIME, Long.toString(JwtProperties.REF_EXPIRATION_MINUTE * 60))
+                .maxAge(JwtProperties.REF_EXPIRATION_MINUTE * 60)
+                .path("/")
+                .secure(true)
+                .sameSite("None")
+                .httpOnly(false)
+                .build()
+                .toString();
+    }
+
     /**
      *
      * @param jwtToken
