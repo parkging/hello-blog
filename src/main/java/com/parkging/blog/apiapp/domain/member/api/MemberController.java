@@ -3,7 +3,6 @@ package com.parkging.blog.apiapp.domain.member.api;
 import com.parkging.blog.apiapp.domain.member.domain.Member;
 import com.parkging.blog.apiapp.domain.member.domain.MemberRole;
 import com.parkging.blog.apiapp.domain.member.dto.LoginDto;
-import com.parkging.blog.apiapp.domain.member.dto.LoginResult;
 import com.parkging.blog.apiapp.domain.member.dto.MemberDto;
 import com.parkging.blog.apiapp.domain.member.dto.SginUpDto;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;

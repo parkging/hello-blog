@@ -1,12 +1,7 @@
 package com.parkging.blog.apiapp.global.config.jwt;
 
-import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkging.blog.apiapp.domain.member.domain.Member;
-import com.parkging.blog.apiapp.domain.member.exception.LoginFailException;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.auth.PrincipalDetails;
 import com.parkging.blog.apiapp.global.exception.RevalidationException;
@@ -16,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -33,6 +27,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter {
+    //superClass에서 사용됨; 필수선언
     private final AuthenticationManager authenticationManager;
     private final MemberService memberService;
 

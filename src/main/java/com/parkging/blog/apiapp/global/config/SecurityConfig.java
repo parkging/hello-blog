@@ -1,5 +1,6 @@
 package com.parkging.blog.apiapp.global.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.config.cors.CorsConfig;
 import com.parkging.blog.apiapp.global.config.jwt.JwtAuthenticationFilter;
@@ -29,6 +30,7 @@ public class SecurityConfig {
     private final ErrorMessageUtil errorMessageUtil;
     private final CorsConfig corsConfig;
     private final MemberService memberService;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -64,7 +66,7 @@ public class SecurityConfig {
         public void configure(HttpSecurity http) throws Exception {
 
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, objectMapper);
             jwtAuthenticationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
 
             JwtRevalidationFilter jwtRevalidationFilter = new JwtRevalidationFilter(authenticationManager, memberService);
