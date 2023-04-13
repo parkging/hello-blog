@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -26,7 +25,9 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    //superClass에서 사용됨; 필수선언
     private final AuthenticationManager authenticationManager;
+    private final ObjectMapper objectMapper;
 
     /**
      * Post로 "/login" 요청 시 실행
@@ -39,16 +40,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
         /**
          * 1. 수신 된 email, password 로그인 시도 => DI 받은 AuthenticationManager 로 로그인 시도 시 PrincipalDetailsService 호출
          * 3. PrincipalDetailsService 에서 attemptAuthentication 메쏘드 호출
          * 4. PrincipalDetails를 세션에 담고 JWT 토큰 생성 후 응답
          */
         try {
-            ObjectMapper om = new ObjectMapper();
-            Member member = om.readValue(request.getInputStream(), Member.class);
+            Member member = objectMapper.readValue(request.getInputStream(), Member.class);
 
             /**
              * PrincipalDetailsService.loadUserByUsername() 실행
