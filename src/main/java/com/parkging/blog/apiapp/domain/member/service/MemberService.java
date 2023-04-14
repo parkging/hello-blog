@@ -6,6 +6,7 @@ import com.parkging.blog.apiapp.domain.member.domain.MemberRole;
 import com.parkging.blog.apiapp.domain.member.exception.LoginFailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import javax.persistence.NoResultException;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public Long join(String name, String email, String password, String passwordConfirm, MemberRole memberRole) {
@@ -26,7 +28,7 @@ public class MemberService {
         return memberRepository.save(Member.builder()
                 .name(name)
                 .email(email)
-                .password(password)
+                .password(bCryptPasswordEncoder.encode(password))
                 .memberRole(MemberRole.ROLE_USER)
                 .build()
             ).getId();
@@ -37,7 +39,7 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NoResultException("error.member.notexgist"));
 
-        member.update(name, password, memberRole);
+        member.update(name, bCryptPasswordEncoder.encode(password), memberRole);
 
         return member.getId();
     }

@@ -6,6 +6,7 @@ import com.parkging.blog.apiapp.domain.member.domain.Member;
 import com.parkging.blog.apiapp.global.auth.PrincipalDetails;
 import com.parkging.blog.apiapp.global.exception.RevalidationException;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -87,11 +88,19 @@ public final class JwtUtil {
                 .asString();
     }
 
+    //Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 반환
     public static Authentication getAuthentication(Member member) {
 
         PrincipalDetails principalDetails = new PrincipalDetails(member);
 
-        //Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체 생성
         return new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+    }
+
+    //사용자 정보 검증 후 Authentication 반환
+    public static Authentication getAuthentication(Member member, AuthenticationManager authenticationManager) {
+
+        PrincipalDetails principalDetails = new PrincipalDetails(member);
+
+        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword()));
     }
 }

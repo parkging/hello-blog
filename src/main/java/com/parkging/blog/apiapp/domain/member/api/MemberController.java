@@ -7,24 +7,24 @@ import com.parkging.blog.apiapp.domain.member.dto.MemberDto;
 import com.parkging.blog.apiapp.domain.member.dto.SginUpDto;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("members")
     public Long join(@RequestBody @Validated SginUpDto sginUpDto) {
         return memberService.join(sginUpDto.getName(),
                                 sginUpDto.getEmail(),
-                                bCryptPasswordEncoder.encode(sginUpDto.getPassword()),
-                                bCryptPasswordEncoder.encode(sginUpDto.getPasswordConfirm()),
+                                sginUpDto.getPassword(),
+                                sginUpDto.getPasswordConfirm(),
                                 MemberRole.ROLE_USER);
     }
 
@@ -55,13 +55,15 @@ public class MemberController {
     public Long updateById(@PathVariable(required = true) Long memberId, @RequestBody MemberDto memberDto) {
         return memberService.update(memberId,
                             memberDto.getName(),
-                            bCryptPasswordEncoder.encode(memberDto.getPassword()),
+                            memberDto.getPassword(),
                             MemberRole.ROLE_USER);
     }
 
-    @DeleteMapping("certification")
+    /**
+     * JWT로 변경 => logout 기능 더이상 사용안함!
+     */
+//    @DeleteMapping("certification")
     public void logout() {
-        /* todo 로그아웃 기능 추가 필요 */
     }
 
 }

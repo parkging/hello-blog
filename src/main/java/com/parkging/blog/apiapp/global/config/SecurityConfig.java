@@ -33,11 +33,6 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
 
     @Bean
-    public BCryptPasswordEncoder encodePwd() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //JWT 필터 추가
 //        http.addFilterBefore(new JwtFilter(), SecurityContextPersistenceFilter.class);
@@ -52,7 +47,7 @@ public class SecurityConfig {
                 .apply(new custumFilterDsl()) //커스텀 필터 적용
                 .and()
                 .authorizeRequests()
-                .antMatchers("/members/**").authenticated()  // 인증 되면 접속
+//                .antMatchers("/members/**").authenticated()  // 인증 되면 접속
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')") // 인가 되면 접속
                 .anyRequest().permitAll()
 

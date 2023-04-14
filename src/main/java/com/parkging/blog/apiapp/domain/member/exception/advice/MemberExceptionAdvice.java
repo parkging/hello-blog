@@ -41,13 +41,13 @@ public class MemberExceptionAdvice {
         return eu.getErrorResult(e);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler
-    public ErrorResult loginFailException(LoginFailException e) {
-        log.error("[MemberExceptionAdvice.noResultException]", e);
-        String redirectUrl = "login/login-form";
-        //todo 화면에서 redirect 주소 정의 후 수정 해야함
-        return eu.getErrorResult(e, redirectUrl);
-    }
+//    //미사용; ExceptionHandlerFilter 에서 처리
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler
+//    public ErrorResult loginFailException(LoginFailException e) {
+//        log.error("[MemberExceptionAdvice.noResultException]", e);
+//        String redirectUrl = "login/login-form";
+//        return eu.getErrorResult(e, redirectUrl);
+//    }
 
 }

@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
              * 인증 실패 => throw AuthenticationException(InternalAuthenticationServiceException | BadCredentialsException ...)
              * 인증 성공 => Authentication return
              */
-            Authentication authentication = JwtUtil.getAuthentication(member);
+            Authentication authentication = JwtUtil.getAuthentication(member, authenticationManager);
 
             //return 시 authentication 객체가 session 영역에 저장됨. session은 인가에만 일시적으로 사용
             return authentication;
