@@ -3,10 +3,7 @@ package com.parkging.blog.apiapp.global.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.config.cors.CorsConfig;
-import com.parkging.blog.apiapp.global.config.jwt.JwtAuthenticationFilter;
-import com.parkging.blog.apiapp.global.config.jwt.JwtAuthorizationFilter;
-import com.parkging.blog.apiapp.global.config.jwt.JwtProperties;
-import com.parkging.blog.apiapp.global.config.jwt.JwtRevalidationFilter;
+import com.parkging.blog.apiapp.global.config.jwt.*;
 import com.parkging.blog.apiapp.global.exception.ErrorMessageUtil;
 import com.parkging.blog.apiapp.global.filter.ExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -31,6 +27,7 @@ public class SecurityConfig {
     private final CorsConfig corsConfig;
     private final MemberService memberService;
     private final ObjectMapper objectMapper;
+    private final JwtSecretKeyUtil jwtSecretKeyUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -61,14 +58,13 @@ public class SecurityConfig {
         public void configure(HttpSecurity http) throws Exception {
 
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, objectMapper);
-            jwtAuthenticationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, objectMapper, jwtSecretKeyUtil);
+            JwtRevalidationFilter jwtRevalidationFilter = new JwtRevalidationFilter(authenticationManager, memberService, jwtSecretKeyUtil);
+            JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService, jwtSecretKeyUtil);
 
-            JwtRevalidationFilter jwtRevalidationFilter = new JwtRevalidationFilter(authenticationManager, memberService);
+            jwtAuthenticationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
             jwtRevalidationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
             jwtRevalidationFilter.setFilterProcessesUrl(JwtProperties.REFRESH_TOKEN_URL);
-
-            JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService);
 
             http
                     .addFilter(corsConfig.corsFilter())

@@ -21,10 +21,12 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private MemberService memberService;
+    private JwtSecretKeyUtil jwtSecretKeyUtil;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberService memberService) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberService memberService, JwtSecretKeyUtil jwtSecretKeyUtil) {
         super(authenticationManager);
         this.memberService = memberService;
+        this.jwtSecretKeyUtil = jwtSecretKeyUtil;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING)
                 .replace(JwtProperties.TOKEN_PREFIX, "");
 
-        String userEmail = JwtUtil.verifyToken(jwtToken, JwtProperties.JWT_SECRET);
+        String userEmail = JwtUtil.verifyToken(jwtToken, jwtSecretKeyUtil.getJwtSecret());
 
         // 토큰 서명이 정상적으로 이루어짐
         if(userEmail != null) {

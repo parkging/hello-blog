@@ -19,23 +19,14 @@ import static com.parkging.blog.apiapp.global.config.jwt.JwtProperties.REFRESH_T
 
 public final class JwtUtil {
 
-    public static String getJwtToken(PrincipalDetails principalDetails) {
+    public static String getJwtToken(PrincipalDetails principalDetails, String jwtSecretKey, Long jwtExpirationMinute) {
         return JWT.create()
                 .withSubject(principalDetails.getUsername())
                 .withExpiresAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(JwtProperties.JWT_EXPIRATION_MINUTE)))
                 .withClaim("id", principalDetails.getId())
                 .withClaim("email", principalDetails.getUsername())
-                .withClaim("expire_millisecond", JwtProperties.JWT_EXPIRATION_MINUTE * 60 * 1000)
-                .sign(Algorithm.HMAC512(JwtProperties.JWT_SECRET));
-    }
-
-    public static String getRefreshToken(PrincipalDetails principalDetails) {
-        return JWT.create()
-                .withSubject(principalDetails.getUsername())
-                .withExpiresAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(JwtProperties.REF_EXPIRATION_MINUTE)))
-                .withClaim("id", principalDetails.getId())
-                .withClaim("email", principalDetails.getUsername())
-                .sign(Algorithm.HMAC512(JwtProperties.REF_SECRET));
+                .withClaim("expire_millisecond", jwtExpirationMinute * 60 * 1000)
+                .sign(Algorithm.HMAC512(jwtSecretKey));
     }
 
     public static String getRefreshTokenByCookies(Cookie[] cookies) {

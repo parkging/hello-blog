@@ -1,10 +1,6 @@
 package com.parkging.blog.apiapp.global.config.jwt;
 
-
-//todo 서버 기동 시 DB 혹은 환경변수에서 init 되도록 수정
 public interface JwtProperties {
-    String JWT_SECRET = "jwt-secret.blog.parkging.com";
-    String REF_SECRET = "ref-secret.blog.parkging.com";
     Long JWT_EXPIRATION_MINUTE = 10L;
     Long REF_EXPIRATION_MINUTE = 180L;
     String TOKEN_PREFIX = "Bearer ";
@@ -13,7 +9,4 @@ public interface JwtProperties {
     String REFRESH_EXPIRE_TIME = "refreshExpireTime";
     String REFRESH_TOKEN_URL = "/silent-refresh";
     String JWT_USERNAME_PARAMETER = "email";
-
-
-
 }

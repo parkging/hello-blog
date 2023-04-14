@@ -30,6 +30,7 @@ public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter 
     //superClass에서 사용됨; 필수선언
     private final AuthenticationManager authenticationManager;
     private final MemberService memberService;
+    private final JwtSecretKeyUtil jwtSecretKeyUtil;
 
     /**
      * Post로 "/silent-refresh" 요청 시 실행
@@ -52,7 +53,7 @@ public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter 
 
         try {
             //refreshToken 검증
-            String userEmail = JwtUtil.verifyToken(refreshToken, JwtProperties.REF_SECRET);
+            String userEmail = JwtUtil.verifyToken(refreshToken, jwtSecretKeyUtil.getRefSecret());
 
             // 토큰 서명이 정상적으로 이루어짐
             if (userEmail != null) {
@@ -87,7 +88,7 @@ public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter 
         // 시큐리티 세션에 강제로 Authentication 객체 저장
         SecurityContextHolder.getContext().setAuthentication(authResult);
 
-        String jwtToken = JwtUtil.getJwtToken(principalDetails);
+        String jwtToken = JwtUtil.getJwtToken(principalDetails, jwtSecretKeyUtil.getJwtSecret(), JwtProperties.JWT_EXPIRATION_MINUTE);
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
 

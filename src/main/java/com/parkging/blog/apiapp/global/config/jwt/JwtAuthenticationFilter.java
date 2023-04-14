@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     //superClass에서 사용됨; 필수선언
     private final AuthenticationManager authenticationManager;
     private final ObjectMapper objectMapper;
+    private final JwtSecretKeyUtil jwtSecretKeyUtil;
 
     /**
      * Post로 "/login" 요청 시 실행
@@ -78,8 +79,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        String jwt = JwtUtil.getJwtToken(principalDetails);
-        String refreshToken = JwtUtil.getRefreshToken(principalDetails);
+        String jwt = JwtUtil.getJwtToken(principalDetails, jwtSecretKeyUtil.getJwtSecret(), JwtProperties.JWT_EXPIRATION_MINUTE);
+        String refreshToken = JwtUtil.getJwtToken(principalDetails, jwtSecretKeyUtil.getRefSecret(), JwtProperties.REF_EXPIRATION_MINUTE);
         String refreshTokenCookie = JwtUtil.getRefreshTokenCookie(refreshToken);
         String refreshTokenExpireTimeCookie = JwtUtil.getRefreshTokenExpireTimeCookie();
 
