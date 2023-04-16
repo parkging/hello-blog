@@ -43,6 +43,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, attributes);
+        log.info("oauth2user={}", extractAttributes.getOauth2UserInfo().toString());
+
         // 추출된 extractAttributes로 회원 조회; 회원 미존재 시 회원가입
         Member member = getMember(extractAttributes, socialType);
 

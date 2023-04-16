@@ -1,8 +1,6 @@
 package com.parkging.blog.apiapp.global.oauth;
 
-import com.parkging.blog.apiapp.global.oauth.userinfo.GoogleOAuth2UserInfo;
-import com.parkging.blog.apiapp.global.oauth.userinfo.OAuth2UserInfo;
-import com.parkging.blog.apiapp.global.oauth.userinfo.SocialType;
+import com.parkging.blog.apiapp.global.oauth.userinfo.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
@@ -26,6 +24,10 @@ public class OAuthAttributes {
 
         if(socialType.equals(SocialType.GOOGLE)) {
             return ofGoogle(userNameAttributeName, attributes);
+        } else if(socialType.equals(SocialType.NAVER)) {
+            return ofNaver(userNameAttributeName, attributes);
+        } else if(socialType.equals(SocialType.KAKAO)) {
+            return ofKakao(userNameAttributeName, attributes);
         } else {
             throw new IllegalIdentifierException("지원하지 않는 소셜 로그인 요청입니다.");
         }
@@ -35,6 +37,20 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .nameAttributeKey(userNameAttributeName)
                 .oauth2UserInfo(new GoogleOAuth2UserInfo(attributes))
+                .build();
+    }
+
+    public static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                .nameAttributeKey(userNameAttributeName)
+                .oauth2UserInfo(new NaverOAuth2UserInfo(attributes))
+                .build();
+    }
+
+    public static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                .nameAttributeKey(userNameAttributeName)
+                .oauth2UserInfo(new KakaoOAuth2UserInfo(attributes))
                 .build();
     }
 
