@@ -1,6 +1,6 @@
 package com.parkging.blog.apiapp.global.config;
 
-import com.parkging.blog.apiapp.global.filter.TempFilter;
+import com.parkging.blog.apiapp.global.filter.LogFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,14 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FilterConfig {
 
-    /*todo 로그 필터 추가*/
-
-    @Bean
-    public FilterRegistrationBean<TempFilter> tempFilter() {
-        FilterRegistrationBean<TempFilter> bean = new FilterRegistrationBean<>(new TempFilter());
-        bean.addUrlPatterns("/*");
-        bean.setOrder(0);
-        return bean;
-    }
+//    @Bean
+//    public FilterRegistrationBean<LogFilter> logFilter() {
+//        FilterRegistrationBean<LogFilter> bean = new FilterRegistrationBean<>(new LogFilter());
+//        bean.addUrlPatterns("/*");
+//        bean.setOrder(0);
+//        return bean;
+//    }
 
 }

@@ -5,6 +5,7 @@ import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.config.cors.CorsConfig;
 import com.parkging.blog.apiapp.global.exception.ErrorMessageUtil;
 import com.parkging.blog.apiapp.global.filter.ExceptionHandlerFilter;
+import com.parkging.blog.apiapp.global.filter.LogFilter;
 import com.parkging.blog.apiapp.global.jwt.*;
 import com.parkging.blog.apiapp.global.jwt.filter.JwtAuthenticationFilter;
 import com.parkging.blog.apiapp.global.jwt.filter.JwtAuthorizationFilter;
@@ -24,6 +25,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -43,8 +45,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //JWT 필터 추가
-//        http.addFilterBefore(new JwtFilter(), SecurityContextPersistenceFilter.class);
+        //LOG 필터 추가
+        http.addFilterBefore(new LogFilter(), SecurityContextPersistenceFilter.class);
 
         // 세션 미사용하므로 csrf 비활성화, Stateless 세팅
         http.csrf().disable();
