@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')") // 인가 되면 접속
                 .anyRequest().permitAll()
                 .and()
+                // Oauth Setting
                 .oauth2Login()
                 .successHandler(oAuth2LoginSuccessHandler)
                 .failureHandler(oAuth2LoginFailureHandler)
@@ -88,10 +89,6 @@ public class SecurityConfig {
             jwtAuthenticationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
             jwtRevalidationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
             jwtRevalidationFilter.setFilterProcessesUrl(JwtProperties.REFRESH_TOKEN_URL);
-
-            // Oauth filters
-            OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler = new OAuth2LoginSuccessHandler();
-            OAuth2LoginFailureHandler oAuth2LoginFailureHandler = new OAuth2LoginFailureHandler();
 
             http
                     //Exception Filter

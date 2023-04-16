@@ -5,6 +5,7 @@ import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.jwt.JwtProperties;
 import com.parkging.blog.apiapp.global.jwt.util.JwtSecretKeyUtil;
 import com.parkging.blog.apiapp.global.jwt.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import java.io.IOException;
  * MemberRole을 통하여 권한 검증,
  * 검증 실패 시 throw JWTVerificationException; ExceptionHandlerFilter 에서 오류응답
  */
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private MemberService memberService;
@@ -35,6 +37,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        log.info("JwtAuthorizationFilter.doFilterInternal");
 
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
 

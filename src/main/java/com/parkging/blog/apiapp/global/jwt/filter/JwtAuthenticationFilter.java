@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
+        log.info("JwtAuthenticationFilter.attemptAuthentication");
         /**
          * 1. 수신 된 email, password 로그인 시도 => DI 받은 AuthenticationManager 로 로그인 시도 시 PrincipalDetailsService 호출
          * 3. PrincipalDetailsService 에서 attemptAuthentication 메쏘드 호출
