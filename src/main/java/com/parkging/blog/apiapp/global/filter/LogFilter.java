@@ -18,7 +18,7 @@ public class LogFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        MDC.put("transactionId", UUID.randomUUID().toString());
+        MDC.put("transactionId", UUID.randomUUID().toString() + " ");
 
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
@@ -98,10 +98,10 @@ public class LogFilter implements Filter {
     private void printRequestLog(HttpServletRequest request,
                                  ContentCachingRequestWrapper requestWrapper,
                                  ContentCachingResponseWrapper responseWrapper) throws IOException {
-        log.info("\n" +
-                        "[REQUEST] {} - {}\n" +
-                        "Headers : {}\n" +
-                        "Request : {}\n",
+        log.info("" +
+                        "[REQUEST] {} - {}, " +
+                        "Headers : {}, " +
+                        "Request : {}, ",
                 request.getMethod(),
                 request.getRequestURI(),
                 getHeaders(request),
@@ -113,10 +113,10 @@ public class LogFilter implements Filter {
                                   ContentCachingResponseWrapper responseWrapper,
                                   long start,
                                   long end) throws IOException {
-        log.info("\n" +
-                        "[RESPONSE] status : {} - {}\n" +
-                        "Headers : {}\n" +
-                        "Response : {}\n",
+        log.info("" +
+                        "[RESPONSE] status : {} - {}, " +
+                        "Headers : {}, " +
+                        "Response : {}, ",
                 responseWrapper.getStatus(),
                 (end - start) / 1000.0,
                 getHeaders(response),
