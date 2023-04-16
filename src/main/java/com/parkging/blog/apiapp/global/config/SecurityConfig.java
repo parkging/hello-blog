@@ -3,9 +3,16 @@ package com.parkging.blog.apiapp.global.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkging.blog.apiapp.domain.member.service.MemberService;
 import com.parkging.blog.apiapp.global.config.cors.CorsConfig;
-import com.parkging.blog.apiapp.global.config.jwt.*;
 import com.parkging.blog.apiapp.global.exception.ErrorMessageUtil;
 import com.parkging.blog.apiapp.global.filter.ExceptionHandlerFilter;
+import com.parkging.blog.apiapp.global.jwt.*;
+import com.parkging.blog.apiapp.global.jwt.filter.JwtAuthenticationFilter;
+import com.parkging.blog.apiapp.global.jwt.filter.JwtAuthorizationFilter;
+import com.parkging.blog.apiapp.global.jwt.filter.JwtRevalidationFilter;
+import com.parkging.blog.apiapp.global.jwt.util.JwtSecretKeyUtil;
+import com.parkging.blog.apiapp.global.oauth.handler.OAuth2LoginFailureHandler;
+import com.parkging.blog.apiapp.global.oauth.handler.OAuth2LoginSuccessHandler;
+import com.parkging.blog.apiapp.global.oauth.service.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +35,11 @@ public class SecurityConfig {
     private final MemberService memberService;
     private final ObjectMapper objectMapper;
     private final JwtSecretKeyUtil jwtSecretKeyUtil;
+    private final PrincipalOauth2UserService principalOauth2UserService;
+
+    // Oauth filters
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,22 +53,31 @@ public class SecurityConfig {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .apply(new custumFilterDsl()) //커스텀 필터 적용
+                .apply(new CustomFilterDsl()) //커스텀 필터 적용
                 .and()
                 .authorizeRequests()
 //                .antMatchers("/members/**").authenticated()  // 인증 되면 접속
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')") // 인가 되면 접속
                 .anyRequest().permitAll()
+                .and()
+                .oauth2Login()
+                .successHandler(oAuth2LoginSuccessHandler)
+                .failureHandler(oAuth2LoginFailureHandler)
+                .userInfoEndpoint().userService(principalOauth2UserService)
 
         ;
         return http.build();
     }
 
-    public class custumFilterDsl extends AbstractHttpConfigurer<custumFilterDsl, HttpSecurity> {
+    public class CustomFilterDsl extends AbstractHttpConfigurer<CustomFilterDsl, HttpSecurity> {
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
 
+            //Exception Filters
+            ExceptionHandlerFilter exceptionHandlerFilter = new ExceptionHandlerFilter(errorMessageUtil, memberService);;
+
+            //JWT filters
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, objectMapper, jwtSecretKeyUtil);
             JwtRevalidationFilter jwtRevalidationFilter = new JwtRevalidationFilter(authenticationManager, memberService, jwtSecretKeyUtil);
@@ -66,12 +87,19 @@ public class SecurityConfig {
             jwtRevalidationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
             jwtRevalidationFilter.setFilterProcessesUrl(JwtProperties.REFRESH_TOKEN_URL);
 
+            // Oauth filters
+            OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler = new OAuth2LoginSuccessHandler();
+            OAuth2LoginFailureHandler oAuth2LoginFailureHandler = new OAuth2LoginFailureHandler();
+
             http
+                    //Exception Filter
+                    .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
+
+                    //JWT filters
                     .addFilter(corsConfig.corsFilter())
                     .addFilter(jwtAuthenticationFilter)
                     .addFilter(jwtRevalidationFilter)
                     .addFilter(jwtAuthorizationFilter)
-                    .addFilterBefore(new ExceptionHandlerFilter(errorMessageUtil, memberService), UsernamePasswordAuthenticationFilter.class)
             ;
         }
     }

@@ -1,6 +1,5 @@
-package com.parkging.blog.apiapp.global.config.jwt;
+package com.parkging.blog.apiapp.global.jwt.util;
 
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

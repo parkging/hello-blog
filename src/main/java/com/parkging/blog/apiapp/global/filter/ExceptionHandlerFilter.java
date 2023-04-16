@@ -26,6 +26,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     private static final String LOGIN_ERROR_CODE = "error.login.fail";
     private static final String REVAILDATION_ERROR_CODE = "error.login.revalidation";
     private static final String LOGIN_EXPIRED_CODE = "error.login.expired";
+    public static final String ERROR_BADREQUEST = "error.badrequest";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -55,6 +56,11 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             log.info("JWT인증 실패",e);;
 
             ErrorResult errorResult = eu.getErrorResult(LOGIN_ERROR_CODE, null, null);
+            eu.setErrorResponse(response, errorResult, HttpStatus.UNAUTHORIZED);
+        } catch (IllegalArgumentException e) {
+            log.info("",e);;
+
+            ErrorResult errorResult = eu.getErrorResult(ERROR_BADREQUEST, null, null);
             eu.setErrorResponse(response, errorResult, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             log.error("", e);
