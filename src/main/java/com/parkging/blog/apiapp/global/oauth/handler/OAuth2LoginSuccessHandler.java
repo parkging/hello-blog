@@ -28,7 +28,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("OAuth2LoginSuccessHandler.onAuthenticationSuccess authentication={}", authentication);
+        log.info("OAuth2LoginSuccessHandler.onAuthenticationSuccess");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         String jwt = JwtUtil.getJwtToken(principalDetails, jwtSecretKeyUtil.getJwtSecret(), JwtProperties.JWT_EXPIRATION_MINUTE);
@@ -39,7 +39,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwt);
         response.setHeader("Set-Cookie", refreshTokenCookie);
         response.addHeader("Set-Cookie", refreshTokenExpireTimeCookie);
-//        response.sendRedirect("http://localhost:3000/");
         response.sendRedirect(CLIENT_URL+":"+CLIENT_PORT);
     }
 }

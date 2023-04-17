@@ -66,7 +66,7 @@ public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter 
             }
 
         } catch (JWTVerificationException ex) {
-            log.info("JWT 갱신 실패", ex);
+            log.info("JWT 갱신 실패");
             throw new RevalidationException(ex);
         }
 
@@ -108,7 +108,6 @@ public class JwtRevalidationFilter extends UsernamePasswordAuthenticationFilter 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         log.info("JwtRevalidationFilter.unsuccessfulAuthentication : 갱신 실패");
-        log.info("", failed);
         throw failed;
     }
 }

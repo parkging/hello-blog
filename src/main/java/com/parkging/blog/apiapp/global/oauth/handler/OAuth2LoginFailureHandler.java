@@ -1,5 +1,6 @@
 package com.parkging.blog.apiapp.global.oauth.handler;
 
+import com.parkging.blog.apiapp.domain.member.exception.LoginFailException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -15,6 +16,6 @@ import java.io.IOException;
 public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.info("OAuth2LoginFailureHandler.onAuthenticationFailure", exception);
+        throw new LoginFailException("로그인  실패");
     }
 }
