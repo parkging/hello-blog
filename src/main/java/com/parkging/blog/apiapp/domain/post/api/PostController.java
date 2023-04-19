@@ -46,7 +46,7 @@ public class PostController {
             response.setHeader("X-Total-Count", Long.toString(postService.countAll()));
             return postService.findAll(pageable);
         } else {
-            response.setHeader("X-Total-Count", Long.toString(postService.countBypostCategoryName(postCategoryName)));
+            response.setHeader("X-Total-Count", Long.toString(postService.countByPostCategoryName(postCategoryName)));
             return postService.findAllViewByCategoryName(postCategoryName, pageable);
         }
     }

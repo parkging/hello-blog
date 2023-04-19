@@ -23,7 +23,7 @@ public final class JwtUtil {
     public static String getJwtToken(PrincipalDetails principalDetails, String jwtSecretKey, Long jwtExpirationMinute) {
         return JWT.create()
                 .withSubject(principalDetails.getUsername())
-                .withExpiresAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(JwtProperties.JWT_EXPIRATION_MINUTE)))
+                .withExpiresAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(jwtExpirationMinute)))
                 .withClaim("id", principalDetails.getId())
                 .withClaim("email", principalDetails.getUsername())
                 .withClaim("expire_millisecond", jwtExpirationMinute * 60 * 1000)
