@@ -13,6 +13,7 @@ public interface PostViewDto {
     String getPostCategoryId();
     String getPreview();
     String getMemberName();
+    String getMemberId();
     String getThumbnailImageUrl();
     LocalDateTime getCreateDate();
     LocalDateTime getModifiedDate();

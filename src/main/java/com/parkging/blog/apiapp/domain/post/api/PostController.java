@@ -22,7 +22,7 @@ public class PostController {
     public static final int PAGE_SIZE = 5;
     private final PostService postService;
 
-    @Secured(MemberRole.ROLES.USER)
+    @Secured({MemberRole.ROLES.USER, MemberRole.ROLES.ADMIN})
     @PostMapping("posts")
     public Long savePost(@RequestBody @Validated PostDto postDto) {
         return postService.save(postDto.getTitle(),
@@ -65,7 +65,7 @@ public class PostController {
 //        return postService.findAllViewByCategoryName(categoryName, pageable);
 //    }
 
-    @Secured(MemberRole.ROLES.USER)
+    @Secured({MemberRole.ROLES.USER, MemberRole.ROLES.ADMIN})
     @PatchMapping("posts/{postId}")
     public Long updateById(@PathVariable(required = true) Long postId,
                                @RequestBody @Validated PostDto postDto) {
@@ -77,7 +77,7 @@ public class PostController {
                 postDto.getThumbnailImageUrl());
     }
 
-    @Secured(MemberRole.ROLES.USER)
+    @Secured({MemberRole.ROLES.USER, MemberRole.ROLES.ADMIN})
     @DeleteMapping("posts/{postId}")
     public Long deletetById(@PathVariable(required = true) Long postId) {
         return postService.deleteById(postId);

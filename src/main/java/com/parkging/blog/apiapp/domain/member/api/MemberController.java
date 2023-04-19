@@ -28,7 +28,7 @@ public class MemberController {
                                 MemberRole.ROLE_USER);
     }
 
-    @Secured({MemberRole.ROLES.USER})
+    @Secured({MemberRole.ROLES.USER, MemberRole.ROLES.ADMIN})
     @GetMapping("members/{memberId}")
     public MemberDto getMember(@PathVariable Long memberId) {
         Member member = memberService.findById(memberId);
@@ -50,7 +50,7 @@ public class MemberController {
         return "";
     }
 
-    @Secured({MemberRole.ROLES.USER})
+    @Secured({MemberRole.ROLES.USER, MemberRole.ROLES.ADMIN})
     @PatchMapping("members/{memberId}")
     public Long updateById(@PathVariable(required = true) Long memberId, @RequestBody MemberDto memberDto) {
         return memberService.update(memberId,
