@@ -23,10 +23,6 @@ import java.io.IOException;
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
     private final ErrorMessageUtil eu;
     private final MemberService memberService;
-    private static final String LOGIN_ERROR_CODE = "error.login.fail";
-    private static final String REVAILDATION_ERROR_CODE = "error.login.revalidation";
-    private static final String LOGIN_EXPIRED_CODE = "error.login.expired";
-    public static final String ERROR_BADREQUEST = "error.badrequest";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -37,30 +33,35 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             //인증 실패
             log.info("인증 실패",e);;
 
-            ErrorResult errorResult = eu.getErrorResult(LOGIN_ERROR_CODE, null, null);
+            ErrorResult errorResult = eu.getErrorResult("error.login.fail", null, null);
             eu.setErrorResponse(response, errorResult, HttpStatus.UNAUTHORIZED);
         } catch (RevalidationException e) {
             //갱신 실패
             log.info("갱신 실패",e);;
 
-            ErrorResult errorResult = eu.getErrorResult(REVAILDATION_ERROR_CODE, null, null);
+            ErrorResult errorResult = eu.getErrorResult("error.login.revalidation", null, null);
             eu.setErrorResponse(response, errorResult, HttpStatus.UNAUTHORIZED);
         } catch (TokenExpiredException e) {
             //JWT 만료
             log.info("JWT 만료",e);
 
-            ErrorResult errorResult = eu.getErrorResult(LOGIN_EXPIRED_CODE, null, null);
+            ErrorResult errorResult = eu.getErrorResult("error.login.expired", null, null);
             eu.setErrorResponse(response, errorResult, HttpStatus.UNAUTHORIZED);
         } catch (JWTVerificationException e) {
             //JWT토큰 검증 실패
             log.info("JWT인증 실패",e);;
 
-            ErrorResult errorResult = eu.getErrorResult(LOGIN_ERROR_CODE, null, null);
+            ErrorResult errorResult = eu.getErrorResult("error.login.fail", null, null);
             eu.setErrorResponse(response, errorResult, HttpStatus.UNAUTHORIZED);
+        } catch (org.springframework.security.access.AccessDeniedException e) {
+            log.info("권한 부족",e);;
+
+            ErrorResult errorResult = eu.getErrorResult("error.forbidden", null, null);
+            eu.setErrorResponse(response, errorResult, HttpStatus.FORBIDDEN);
         } catch (IllegalArgumentException e) {
             log.info("",e);;
 
-            ErrorResult errorResult = eu.getErrorResult(ERROR_BADREQUEST, null, null);
+            ErrorResult errorResult = eu.getErrorResult("error.badrequest", null, null);
             eu.setErrorResponse(response, errorResult, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             log.error("", e);
