@@ -81,7 +81,7 @@ public class PostService {
         return postRepository.count();
     }
 
-    public Long countBypostCategoryName(String postCategoryName) {
+    public Long countByPostCategoryName(String postCategoryName) {
         return postRepository.countByPostCategoryName(postCategoryName);
     }
 
