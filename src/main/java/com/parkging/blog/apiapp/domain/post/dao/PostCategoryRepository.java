@@ -35,7 +35,7 @@ public interface PostCategoryRepository extends JpaRepository<PostCategory, Long
            left join Post p
                   on pc = p.postCategory
                group by pc, ppc
-               order by nvl(ppc.id, pc.id), pc.id
+               order by COALESCE(ppc.id, pc.id), pc.id
            """)
     List<PostCategoryViewDto> findAllBy();
 
