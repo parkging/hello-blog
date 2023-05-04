@@ -29,7 +29,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private MemberService memberService;
     private JwtSecretKeyUtil jwtSecretKeyUtil;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberService memberService, JwtSecretKeyUtil jwtSecretKeyUtil) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
+                                  MemberService memberService,
+                                  JwtSecretKeyUtil jwtSecretKeyUtil) {
         super(authenticationManager);
         this.memberService = memberService;
         this.jwtSecretKeyUtil = jwtSecretKeyUtil;

@@ -35,10 +35,14 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         String refreshToken = JwtUtil.getJwtToken(principalDetails, jwtSecretKeyUtil.getRefSecret(), JwtProperties.REF_EXPIRATION_MINUTE);
         String refreshTokenCookie = JwtUtil.getRefreshTokenCookie(refreshToken);
         String refreshTokenExpireTimeCookie = JwtUtil.getRefreshTokenExpireTimeCookie();
+        String redirectURL = CLIENT_URL;
+        if(!CLIENT_PORT.isBlank()) {
+            redirectURL += ":" + CLIENT_PORT;
+        }
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwt);
         response.setHeader("Set-Cookie", refreshTokenCookie);
         response.addHeader("Set-Cookie", refreshTokenExpireTimeCookie);
-        response.sendRedirect(CLIENT_URL+":"+CLIENT_PORT);
+        response.sendRedirect(redirectURL);
     }
 }

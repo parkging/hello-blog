@@ -16,8 +16,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import static com.parkging.blog.apiapp.global.jwt.JwtProperties.REFRESH_TOKEN_NAME;
-
 public final class JwtUtil {
 
     public static String getJwtToken(PrincipalDetails principalDetails, String jwtSecretKey, Long jwtExpirationMinute) {
@@ -33,7 +31,7 @@ public final class JwtUtil {
     public static String getRefreshTokenByCookies(Cookie[] cookies) {
         if(cookies == null) throw new RevalidationException();
         return Arrays.stream(cookies)
-                .filter(c -> c.getName().equals(REFRESH_TOKEN_NAME))
+                .filter(c -> c.getName().equals(JwtProperties.REFRESH_TOKEN_NAME))
                 .findFirst()
                 .orElseThrow(() -> new RevalidationException())
                 .getValue();
@@ -42,6 +40,7 @@ public final class JwtUtil {
     public static String getRefreshTokenCookie(String refreshToken) {
         return ResponseCookie.from(JwtProperties.REFRESH_TOKEN_NAME, refreshToken)
                 .maxAge(JwtProperties.REF_EXPIRATION_MINUTE * 60)
+                .domain(JwtProperties.JWT_DOMAIN)
                 .path("/")
                 .secure(true)
                 .sameSite("None")
@@ -55,6 +54,7 @@ public final class JwtUtil {
         return ResponseCookie.from(JwtProperties.REFRESH_EXPIRE_TIME, Long.toString(JwtProperties.REF_EXPIRATION_MINUTE * 60))
                 .maxAge(JwtProperties.REF_EXPIRATION_MINUTE * 60)
                 .path("/")
+                .domain(JwtProperties.JWT_DOMAIN)
                 .secure(true)
                 .sameSite("None")
                 .httpOnly(false)
