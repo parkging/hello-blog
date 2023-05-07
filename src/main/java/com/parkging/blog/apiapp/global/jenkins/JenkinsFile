@@ -3,6 +3,7 @@ pipeline {
 
     stages {
         stage('Prepared Source') {
+
             steps {
                 git branch: 'dev', credentialsId: 'parkging', url: 'https://github.com/parkging/hello-blog'
             }
