@@ -1,6 +1,6 @@
 package com.parkging.blog.apiapp.domain.member.exception.advice;
 
-import com.parkging.blog.apiapp.domain.member.exception.LoginFailException;
+import com.parkging.blog.apiapp.domain.member.exception.UnavailableSignUpException;
 import com.parkging.blog.apiapp.global.exception.ErrorMessageUtil;
 import com.parkging.blog.apiapp.global.exception.ErrorResult;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +38,13 @@ public class MemberExceptionAdvice {
     @ExceptionHandler
     public ErrorResult noSuchElementException(NoSuchElementException e) {
         log.error("[MemberExceptionAdvice.NoSuchElementException]", e);
+        return eu.getErrorResult(e);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResult unavailableSignUpException(UnavailableSignUpException e) {
+        log.error("[MemberExceptionAdvice.UnavailableSignUpException]", e);
         return eu.getErrorResult(e);
     }
 

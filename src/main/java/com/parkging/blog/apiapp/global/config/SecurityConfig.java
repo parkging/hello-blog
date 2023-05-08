@@ -45,8 +45,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //Exception 필터 추가
+        http.addFilterBefore(new ExceptionHandlerFilter(errorMessageUtil, memberService), SecurityContextPersistenceFilter.class);
         //LOG 필터 추가
-        http.addFilterBefore(new LogFilter(), SecurityContextPersistenceFilter.class);
+        http.addFilterBefore(new LogFilter(), ExceptionHandlerFilter.class);
 
         // 세션 미사용하므로 csrf 비활성화, Stateless 세팅
         http.csrf().disable();
@@ -77,8 +79,8 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity http) throws Exception {
 
-            //Exception Filters
-            ExceptionHandlerFilter exceptionHandlerFilter = new ExceptionHandlerFilter(errorMessageUtil, memberService);;
+//            //Exception Filters
+//            ExceptionHandlerFilter exceptionHandlerFilter = new ExceptionHandlerFilter(errorMessageUtil, memberService);;
 
             //JWT filters
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
@@ -92,7 +94,7 @@ public class SecurityConfig {
 
             http
                     //Exception Filter
-                    .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
+//                    .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
 
                     //JWT filters
                     .addFilter(corsConfig.corsFilter())
