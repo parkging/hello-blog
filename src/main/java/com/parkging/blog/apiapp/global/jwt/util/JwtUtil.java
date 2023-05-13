@@ -28,6 +28,16 @@ public final class JwtUtil {
                 .sign(Algorithm.HMAC512(jwtSecretKey));
     }
 
+    public static String getDiscardedJwtToken(String jwtSecretKey) {
+        return JWT.create()
+                .withSubject("")
+                .withExpiresAt(Timestamp.valueOf(LocalDateTime.now().plusSeconds(0)))
+                .withClaim("id", "")
+                .withClaim("email", "")
+                .withClaim("expire_millisecond", 0)
+                .sign(Algorithm.HMAC512(jwtSecretKey));
+    }
+
     public static String getRefreshTokenByCookies(Cookie[] cookies) {
         if(cookies == null) throw new RevalidationException();
         return Arrays.stream(cookies)
@@ -49,10 +59,35 @@ public final class JwtUtil {
                 .toString();
     }
 
+    public static String getDiscardedRefreshTokenCookie(String refreshToken) {
+        return ResponseCookie.from(JwtProperties.REFRESH_TOKEN_NAME, refreshToken)
+                .maxAge(1)
+                .domain(JwtProperties.JWT_DOMAIN)
+                .path("/")
+                .secure(true)
+                .sameSite("None")
+                .httpOnly(true)
+                .build()
+                .toString();
+    }
+
     //리프레시토큰 만료시간 쿠키 생성(httpOnly 아님); 해당 쿠키로 클라이언트에서 리프레시토큰 여부 확인
     public static String getRefreshTokenExpireTimeCookie() {
         return ResponseCookie.from(JwtProperties.REFRESH_EXPIRE_TIME, Long.toString(JwtProperties.REF_EXPIRATION_MINUTE * 60))
                 .maxAge(JwtProperties.REF_EXPIRATION_MINUTE * 60)
+                .path("/")
+                .domain(JwtProperties.JWT_DOMAIN)
+                .secure(true)
+                .sameSite("None")
+                .httpOnly(false)
+                .build()
+                .toString();
+    }
+
+    //리프레시토큰 만료시간 쿠키 생성(httpOnly 아님); 해당 쿠키로 클라이언트에서 리프레시토큰 여부 확인
+    public static String getDiscardedRefreshTokenExpireTimeCookie() {
+        return ResponseCookie.from(JwtProperties.REFRESH_EXPIRE_TIME, "")
+                .maxAge(1)
                 .path("/")
                 .domain(JwtProperties.JWT_DOMAIN)
                 .secure(true)

@@ -9,6 +9,7 @@ import com.parkging.blog.apiapp.global.filter.LogFilter;
 import com.parkging.blog.apiapp.global.jwt.*;
 import com.parkging.blog.apiapp.global.jwt.filter.JwtAuthenticationFilter;
 import com.parkging.blog.apiapp.global.jwt.filter.JwtAuthorizationFilter;
+import com.parkging.blog.apiapp.global.jwt.filter.JwtDiscardFilter;
 import com.parkging.blog.apiapp.global.jwt.filter.JwtRevalidationFilter;
 import com.parkging.blog.apiapp.global.jwt.util.JwtSecretKeyUtil;
 import com.parkging.blog.apiapp.global.oauth.handler.OAuth2LoginFailureHandler;
@@ -87,10 +88,12 @@ public class SecurityConfig {
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, objectMapper, jwtSecretKeyUtil);
             JwtRevalidationFilter jwtRevalidationFilter = new JwtRevalidationFilter(authenticationManager, memberService, jwtSecretKeyUtil);
             JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService, jwtSecretKeyUtil);
+            JwtDiscardFilter jwtDiscardFilter = new JwtDiscardFilter(authenticationManager, objectMapper, jwtSecretKeyUtil);
 
             jwtAuthenticationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
             jwtRevalidationFilter.setUsernameParameter(JwtProperties.JWT_USERNAME_PARAMETER);
             jwtRevalidationFilter.setFilterProcessesUrl(JwtProperties.REFRESH_TOKEN_URL);
+            jwtDiscardFilter.setFilterProcessesUrl(JwtProperties.LOGOUT_URL);
 
             http
                     //Exception Filter
@@ -101,6 +104,7 @@ public class SecurityConfig {
                     .addFilter(jwtAuthenticationFilter)
                     .addFilter(jwtRevalidationFilter)
                     .addFilter(jwtAuthorizationFilter)
+                    .addFilter(jwtDiscardFilter)
             ;
         }
     }
