@@ -12,6 +12,7 @@ public final class JwtProperties {
     public final static String REFRESH_TOKEN_NAME = "refreshToken";
     public final static String REFRESH_EXPIRE_TIME = "refreshExpireTime";
     public final static String REFRESH_TOKEN_URL = "/silent-refresh";
+    public final static String LOGOUT_URL = "/log-out";
     public final static String JWT_USERNAME_PARAMETER = "email";
 
     public static String JWT_DOMAIN;
