@@ -1,0 +1,59 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  AWS_REGION: ap-south-1  # 뭄바이
+  S3_BUCKET_NAME: parkging-blog-deploy
+  CODE_DEPLOY_APPLICATION_NAME: prod-blog-backend
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: prod-blog-backend-group
+  ZIP_FILE_NAME: backend/prod/blog-backend
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      # Gradle wrapper 파일 실행 권한 추가
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: |
+          SPRING_PROFILES_ACTIVE=dev ./gradlew clean build --info --stacktrace
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload to AWS S3
+        run: |
+          aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --s3-location s3://${{ env.S3_BUCKET_NAME }}/${{ env.ZIP_FILE_NAME }}.zip \
+          --ignore-hidden-files
+
+      - name: Deploy to AWS EC2 from S3
+        run: |
+          aws deploy create-deployment \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --s3-location bucket=${{ env.S3_BUCKET_NAME }},key=${{ env.ZIP_FILE_NAME }}.zip,bundleType=zip \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --description "Deploying prod-blog-back" --region ${{ env.AWS_REGION }}
