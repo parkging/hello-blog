@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_ROOT="/home/ec2-user"
-JAR_FILE="prod-blog-backend-0.0.1-SNAPSHOT.jar"
+JAR_FILE="blog-backend-0.0.1-SNAPSHOT-plain.jar"
 JAR_FILE_WITH_PATH="$PROJECT_ROOT/prod-blog-backend/build/libs/$JAR_FILE"
 
 APP_LOG="$PROJECT_ROOT/application.log"
