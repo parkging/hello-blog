@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_ROOT="/home/ec2-user/prod-blog-backend"
-JAR_FILE="blog-backend-0.0.1-SNAPSHOT-plain.jar"
+JAR_FILE="blog-backend.jar"
 
 TIME_NOW=$(date +%c)
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
