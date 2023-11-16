@@ -1,11 +1,12 @@
 #!/bin/bash
 
-PROJECT_ROOT="/home/ec2-user"
+PROJECT_ROOT="/home/ec2-user/prod-blog-backend"
+JAR_FILE="blog-backend-0.0.1-SNAPSHOT-plain.jar"
 
 TIME_NOW=$(date +%c)
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
-docker-compose -f $DOCKER_COMPOSE_FILE_WITH_PATH up -d --build &> $DOCKER_COMPOSE_LOG
+#docker-compose -f $DOCKER_COMPOSE_FILE_WITH_PATH up -d --build &> $DOCKER_COMPOSE_LOG
 
 # 현재 구동 중인 애플리케이션 pid 확인
 CURRENT_PID=$(pgrep -f $JAR_FILE)

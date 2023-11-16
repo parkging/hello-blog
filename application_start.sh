@@ -11,6 +11,7 @@ DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 TIME_NOW=$(date +%c)
 
 # jar 파일 실행
+chmod +x $JAR_FILE_WITH_PATH
 echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
 nohup java -jar $JAR_FILE_WITH_PATH --spring.profiles.active=prod > $APP_LOG 2> $ERROR_LOG &
 
