@@ -27,6 +27,10 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
+      # Gradle wrapper 파일 실행 권한 추가
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Build with Gradle
         run: |
           SPRING_PROFILES_ACTIVE=dev ./gradlew clean build --info --stacktrace
