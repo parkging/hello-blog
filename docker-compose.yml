@@ -1,0 +1,13 @@
+version: "3"
+services:
+  backend:
+    image: openjdk:17
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ./build/:/etc/blog/backend/build/
+      - ./log/:/etc/blog/backend/log/
+    command: bash -c "cd /etc/blog/backend/build/&& java -jar -Dspring.profiles.active=prod blog-backend.jar >> /etc/blog/backend/log/blog-backend.log"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
