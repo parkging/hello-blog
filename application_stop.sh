@@ -1,12 +1,8 @@
 #!/bin/bash
 
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
-
-docker-compose down >> $DEPLOY_LOG
+docker-compose down
 
 #### jar 배포 주석처리 start ####
-
-#PROJECT_ROOT="/home/ec2-user/prod-blog-backend"
 #JAR_FILE="blog-backend.jar"
 #
 #TIME_NOW=$(date +%c)
