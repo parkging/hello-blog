@@ -47,3 +47,4 @@ src/**/database-dev.properties
 #src/**/database-prod.properties
 
 
+/logs/
