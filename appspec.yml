@@ -16,7 +16,9 @@ hooks:
     - location: stop.sh
       timeout: 60
       runas: ec2-user
+      command: chmod +x /home/ec2-user/prod-blog-backend/stop.sh
   ApplicationStart:
     - location: start.sh
       timeout: 60
       runas: ec2-user
+      command: chmod +x /home/ec2-user/prod-blog-backend/start.sh
