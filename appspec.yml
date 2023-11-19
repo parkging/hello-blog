@@ -12,11 +12,11 @@ permissions:
     group: ec2-user
 
 hooks:
-  AfterInstall:
-    - location: stop.sh
-      timeout: 60
-      runas: ec2-user
-      cwd: /home/ec2-user/prod-blog-backend/
+#  AfterInstall:
+#    - location: stop.sh
+#      timeout: 60
+#      runas: ec2-user
+#      cwd: /home/ec2-user/prod-blog-backend/
   ApplicationStart:
     - location: start.sh
       timeout: 60
