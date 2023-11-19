@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/prod-blog-backend
+    destination: /home/ec2-user/blog-backend
 file_exists_behavior: OVERWRITE
 
 permissions:
@@ -16,9 +16,9 @@ hooks:
 #    - location: stop.sh
 #      timeout: 60
 #      runas: ec2-user
-#      cwd: /home/ec2-user/prod-blog-backend/
+#      cwd: /home/ec2-user/blog-backend/
   ApplicationStart:
     - location: start.sh
       timeout: 60
       runas: ec2-user
-      cwd: /home/ec2-user/prod-blog-backend/
+      cwd: /home/ec2-user/blog-backend/

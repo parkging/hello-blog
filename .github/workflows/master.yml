@@ -10,7 +10,7 @@ env:
   S3_BUCKET_NAME: parkging-blog-deploy
   CODE_DEPLOY_APPLICATION_NAME: prod-blog-backend
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: prod-blog-backend-group
-  ZIP_FILE_NAME: backend/prod-blog-backend
+  ZIP_FILE_NAME: backend/prod/blog-backend
 
 jobs:
   build:

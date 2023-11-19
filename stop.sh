@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PROJECT_ROOT="/home/ec2-user/blog-backend"
+
+cd $PROJECT_ROOT
 docker-compose down
 
 #### jar 배포 주석처리 start ####
