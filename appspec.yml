@@ -8,15 +8,15 @@ file_exists_behavior: OVERWRITE
 permissions:
   - object: /
     pattern: "**"
-    owner: root
-    group: root
+    owner: ec2-user
+    group: ec2-user
 
 hooks:
-  ApplicationStop:
+  AfterInstall:
     - location: stop.sh
       timeout: 60
-      runas: root
+      runas: ec2-user
   ApplicationStart:
     - location: start.sh
       timeout: 60
-      runas: root
+      runas: ec2-user
