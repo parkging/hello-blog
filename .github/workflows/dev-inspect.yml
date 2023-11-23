@@ -1,6 +1,8 @@
-name: PR Inspect
+name: Test Before Dev Branch Merged
 
 on:
+  push:
+    branches: [ dev ] # dev branch에 PR을 보낼 때 실행
   pull_request:
     branches: [ dev ] # dev branch에 PR을 보낼 때 실행
 

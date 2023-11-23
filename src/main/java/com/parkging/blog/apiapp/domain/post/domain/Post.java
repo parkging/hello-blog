@@ -14,13 +14,13 @@ import javax.persistence.*;
 @Getter
 @EnableJpaAuditing
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(name = "POST_SEQ_GENERATOR", sequenceName = "POST_ID_SEQ",
-        initialValue = 1, allocationSize = 1)
 public class Post extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ_GENERATOR")
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private long id;
     private String title;
+
     @Lob
     private String content;
     private String preview;
