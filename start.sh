@@ -7,8 +7,14 @@ then export BLOG_OP_ENV=local;fi
 
 
 cd $PROJECT_ROOT
+
+# Check if application log file exists
+if [ ! -f "./logs/application.log" ]; then
+  touch ./logs/application.log
+fi
+
 docker-compose up -d
-tail -f 0 ./logs/application.log
+tail -f ./logs/application.log
 
 #### jar 배포 주석처리 start ####
 
