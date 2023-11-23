@@ -2,8 +2,13 @@
 
 PROJECT_ROOT="/home/ec2-user/blog-backend"
 
+if [[ -z "$BLOG_OP_ENV" ]]
+then export BLOG_OP_ENV=local;fi
+
+
 cd $PROJECT_ROOT
 docker-compose up -d
+tail -f 0 ./logs/application.log
 
 #### jar 배포 주석처리 start ####
 
