@@ -1,4 +1,4 @@
-name: PR Inspect
+name: Test Before Master Branch Merged
 
 on:
   pull_request:
