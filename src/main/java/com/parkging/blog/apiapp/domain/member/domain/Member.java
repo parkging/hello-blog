@@ -11,10 +11,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(name = "MEMBER_SEQ_GENERATOR", sequenceName = "MEMBER_ID_SEQ",
-        initialValue = 1, allocationSize = 1)
 public class Member {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 

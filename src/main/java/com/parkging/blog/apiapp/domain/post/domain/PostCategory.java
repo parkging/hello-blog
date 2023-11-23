@@ -10,11 +10,9 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(name = "POST_CATEGORY_SEQ_GENERATOR", sequenceName = "POST_CATEGORY_ID_SEQ",
-        initialValue = 1, allocationSize = 1)
 public class PostCategory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_CATEGORY_SEQ_GENERATOR")
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_category_id")
     private long id;
 
