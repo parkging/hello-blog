@@ -32,6 +32,7 @@ jobs:
         run: |
           echo -e "${{ secrets.APPLICATION_PROD_PROPERTIES }}" >> ./src/main/resources/application-prod.properties
           echo -e "${{ secrets.DATABASE_PROD_PROPERTIES }}" >> ./src/main/resources/database-prod.properties
+          echo -e "${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }}" >> ./src/main/resources/application-security-prod.properties
         env:
           REACT_APP_DOMAIN: ${{ secrets.REACT_APP_DOMAIN }}
           REACT_APP_DEBUG: ${{ secrets.REACT_APP_DEBUG }}
