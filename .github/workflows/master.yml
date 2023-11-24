@@ -30,18 +30,18 @@ jobs:
       # Github Repository Secrets를 통해 환경 변수 파일을 생성합니다.
       - name: Generate Environment Variables File for Production
         run: |
-          echo -e "${{ secrets.APPLICATION_PROD_PROPERTIES }}" >> ./src/main/resources/application-prod.properties \
-          --echo -e "${{ secrets.DATABASE_PROD_PROPERTIES }}" >> ./src/main/resources/database-prod.properties \
-          --echo -e "${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }}" >> ./src/main/resources/application-security-prod.properties \
-          --cat ./src/main/resources/application-prod.properties \
-          --cat ./src/main/resources/database-prod.properties \
-          --cat ./src/main/resources/application-security-prod.properties \
-          --echo -e ${{ secrets.APPLICATION_PROD_PROPERTIES }} \
-          --echo -e ${{ secrets.DATABASE_PROD_PROPERTIES }} \ 
-          --echo -e ${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }} \
-          --echo -e ${{ env.APPLICATION_PROD_PROPERTIES }} \
-          --echo -e ${{ env.DATABASE_PROD_PROPERTIES }} \
-          --echo -e ${{ env.APPLICATION_SECURITY_PROD_PROPERTIES }} \
+          echo -e "${{ secrets.APPLICATION_PROD_PROPERTIES }}" >> ./src/main/resources/application-prod.properties
+          echo -e "${{ secrets.DATABASE_PROD_PROPERTIES }}" >> ./src/main/resources/database-prod.properties
+          echo -e "${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }}" >> ./src/main/resources/application-security-prod.properties
+          cat ./src/main/resources/application-prod.properties
+          cat ./src/main/resources/database-prod.properties
+          cat ./src/main/resources/application-security-prod.properties
+          echo -e "${{ secrets.APPLICATION_PROD_PROPERTIES }}"
+          echo -e "${{ secrets.DATABASE_PROD_PROPERTIES }}"
+          echo -e "${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }}"
+          echo -e "${{ env.APPLICATION_PROD_PROPERTIES }}"
+          echo -e "${{ env.DATABASE_PROD_PROPERTIES }}"
+          echo -e "${{ env.APPLICATION_SECURITY_PROD_PROPERTIES }}"
 
       # Gradle wrapper 파일 실행 권한 추가
       - name: Grant execute permission for gradlew
