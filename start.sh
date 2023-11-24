@@ -12,7 +12,7 @@ cd $PROJECT_ROOT
 
 # Check if application log file exists
 if [ ! -f APP_LOG_FILE ]; then
-  mkdir $APP_LOG_DIR
+  mkdir -p $APP_LOG_DIR
   touch $APP_LOG_FILE
 fi
 
