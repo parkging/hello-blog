@@ -4,10 +4,6 @@ PROJECT_ROOT="/home/ec2-user/blog-backend"
 APP_LOG_DIR=$PROJECT_ROOT/logs
 APP_LOG_FILE=$APP_LOG_DIR/application.log
 
-# 임시 추가
-echo $BLOG_OP_ENV >> blog_op_env.log
-# 임시 추가
-
 #if [ -z "$BLOG_OP_ENV" ]; then
 #  export BLOG_OP_ENV=local;
 #fi
