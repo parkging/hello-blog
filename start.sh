@@ -17,7 +17,7 @@ if [ ! -f APP_LOG_FILE ]; then
 fi
 
 docker-compose up -d
-tail -f ./logs/application.log
+tail -0f ./logs/application.log
 
 #### jar 배포 주석처리 start ####
 
