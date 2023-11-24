@@ -10,6 +10,6 @@ services:
     volumes:
       - ./build/libs/:/etc/blog/backend/build/
       - ./logs/:/etc/blog/backend/logs/
-    command: bash -c "cd /etc/blog/backend/build/&& java -jar -Dspring.profiles.active=${BLOG_OP_ENV} blog-backend.jar >> /etc/blog/backend/logs/application.log" 2>> /etc/blog/backend/logs/error.log &"
+    command: bash -c "cd /etc/blog/backend/build/&& java -jar -Dspring.profiles.active=${BLOG_OP_ENV} blog-backend.jar >> /etc/blog/backend/logs/application.log 2>> /etc/blog/backend/logs/error.log &"
     extra_hosts:
       - "host.docker.internal:host-gateway"
