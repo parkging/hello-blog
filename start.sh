@@ -1,20 +1,23 @@
 #!/bin/bash
 
 PROJECT_ROOT="/home/ec2-user/blog-backend"
+APP_LOG_DIR=$PROJECT_ROOT/logs
+APP_LOG_FILE=$APP_LOG_DIR/application.log
 
 # 임시 추가
 echo $BLOG_OP_ENV >> blog_op_env.log
 # 임시 추가
 
-if [ -z "$BLOG_OP_ENV" ]; then
-  export BLOG_OP_ENV=local;
-fi
+#if [ -z "$BLOG_OP_ENV" ]; then
+#  export BLOG_OP_ENV=local;
+#fi
 
 cd $PROJECT_ROOT
 
 # Check if application log file exists
-if [ ! -f "./logs/application.log" ]; then
-  touch ./logs/application.log
+if [ ! -f APP_LOG_FILE ]; then
+  mkdir $APP_LOG_DIR
+  touch $APP_LOG_FILE
 fi
 
 docker-compose up -d
