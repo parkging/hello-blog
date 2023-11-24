@@ -37,7 +37,7 @@ jobs:
           --cat ./src/main/resources/database-prod.properties \
           --cat ./src/main/resources/application-security-prod.properties \
           --echo -e "${{ secrets.APPLICATION_PROD_PROPERTIES }}" \
-          --echo -e "${{ secrets.DATABASE_PROD_PROPERTIES }}" \
+          --echo -e "${{ secrets.DATABASE_PROD_PROPERTIES }}" \ 
           --echo -e "${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }}" \
           --echo -e "${{ env.APPLICATION_PROD_PROPERTIES }}" \
           --echo -e "${{ env.DATABASE_PROD_PROPERTIES }}" \
