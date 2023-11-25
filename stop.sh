@@ -1,11 +1,10 @@
 #!/bin/bash
 
-PROJECT_ROOT="/home/ec2-user/blog-backend"
-
-JAR_FILE="blog-backend.jar"
-
 TIME_NOW=$(date +%c)
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
+PROJECT_ROOT="/home/ec2-user/blog-backend"
+JAR_FILE="blog-backend.jar"
+APP_LOG_DIR=$PROJECT_ROOT/logs
+DEPLOY_LOG=$APP_LOG_DIR/deploy.log
 
 # 현재 구동 중인 애플리케이션 pid 확인
 CURRENT_PID=$(pgrep -f $JAR_FILE)
