@@ -6,6 +6,11 @@ JAR_FILE="blog-backend.jar"
 APP_LOG_DIR=$PROJECT_ROOT/logs
 DEPLOY_LOG=$APP_LOG_DIR/deploy.log
 
+# Check if log dir exists
+if [ ! -d $APP_LOG_DIR ]; then
+  mkdir $APP_LOG_DIR
+fi
+
 # 현재 구동 중인 애플리케이션 pid 확인
 CURRENT_PID=$(pgrep -f $JAR_FILE)
 
