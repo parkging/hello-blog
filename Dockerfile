@@ -5,11 +5,7 @@ FROM openjdk:17
 WORKDIR /etc/blog/backend
 
 # Copy the contents of the local build directory to the container
-COPY ./build/libs /etc/blog/backend/build
-
-# /etc/blog/backend/build 디렉토리의 권한 설정
-#RUN chmod +x /etc/blog/backend/build/blog-backend.jar
-RUN ls -al /etc/blog/backend/build/blog-backend.jar
+COPY --chmod=765 ./build/libs /etc/blog/backend/build
 
 # Create a directory for logs
 RUN mkdir -p /etc/blog/backend/logs
