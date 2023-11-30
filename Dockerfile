@@ -8,7 +8,7 @@ WORKDIR /etc/blog/backend
 COPY ./build/libs /etc/blog/backend/build
 
 # /etc/blog/backend/build 디렉토리의 권한 설정
-RUN chmod -R +rx /etc/blog/backend/build
+RUN chmod +x /etc/blog/backend/build/blog-backend.jar
 
 # Create a directory for logs
 RUN mkdir -p /etc/blog/backend/logs
