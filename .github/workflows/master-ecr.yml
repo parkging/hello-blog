@@ -36,6 +36,34 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # Java Setting
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      # Github Repository Secrets를 통해 환경 변수 파일을 생성.
+      - name: Generate Environment Variables File for Production
+        env:
+          APPLICATION_PROD_PROPERTIES: ${{ secrets.APPLICATION_PROD_PROPERTIES }}
+          DATABASE_PROD_PROPERTIES: ${{ secrets.DATABASE_PROD_PROPERTIES }}
+          APPLICATION_SECURITY_PROD_PROPERTIES: ${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }}
+        run: |
+          echo -e "$APPLICATION_PROD_PROPERTIES" >> ./src/main/resources/application-prod.properties
+          echo -e "$DATABASE_PROD_PROPERTIES" >> ./src/main/resources/database-prod.properties
+          echo -e "$APPLICATION_SECURITY_PROD_PROPERTIES" >> ./src/main/resources/application-security-prod.properties
+
+      # Gradle wrapper 파일 실행 권한 추가
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Gradle Build
+      - name: Build with Gradle
+        run: |
+          SPRING_PROFILES_ACTIVE=prod ./gradlew clean build --info --stacktrace
+
+      # ECR Login and Push Docker Image
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
