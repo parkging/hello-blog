@@ -15,8 +15,7 @@ env:
   ECR_REPOSITORY: blog-backend-ecr
   ECS_SERVICE: blog-backend-service
   ECS_CLUSTER: blog-backend-cluster02
-  ECS_TASK_DEFINITION: blog-backend-family      # set this to the path to your Amazon ECS task definition
-                                                # file, e.g. .aws/task-definition.json
+  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
   CONTAINER_NAME: blog-backend-container        # set this to the name of the container in the
                                                 # containerDefinitions section of your task definition
 
@@ -85,6 +84,9 @@ jobs:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.imageid }}
+          environment-variables: |
+            BLOG_OP_ENV=prod
+            ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY_VALUE }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -94,5 +96,5 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
           codedeploy-appspec: ecr-appspec.yml
-          codedeploy-application: test-code-deploy-application
-          codedeploy-deployment-group: test-code-deploy-deployment-group
+          codedeploy-application: prod-blog-backend-application
+          codedeploy-deployment-group: prod-blog-backend-application-group

@@ -1,0 +1,25 @@
+{
+  "taskRoleArn": "arn:aws:iam::122612862532:role/ecs-task-roll",
+  "executionRoleArn": "arn:aws:iam::122612862532:role/ecs-task-roll",
+  "containerDefinitions": [
+    {
+      "name": "blog-backend-container",
+      "image": "blog-backend-ecr-image",
+      "essential": true,
+      "portMappings": [
+        {
+          "name": "blog-backend-container-8080-tcp",
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ]
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "networkMode": "awsvpc",
+  "cpu": "512",
+  "memory": "1024",
+  "family": "blog-backend-family"
+}
