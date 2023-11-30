@@ -16,7 +16,7 @@ env:
   ECS_SERVICE: blog-backend-service
   ECS_CLUSTER: blog-backend-cluster02
   ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
-  CONTAINER_NAME: blog-backend-container        # set this to the name of the container in  the
+  CONTAINER_NAME: blog-backend-container        # set this to the name of the container in the
                                                 # containerDefinitions section of your task definition
 
 jobs:
