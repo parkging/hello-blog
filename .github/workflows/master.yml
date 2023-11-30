@@ -37,9 +37,6 @@ jobs:
           echo -e "$APPLICATION_PROD_PROPERTIES" >> ./src/main/resources/application-prod.properties
           echo -e "$DATABASE_PROD_PROPERTIES" >> ./src/main/resources/database-prod.properties
           echo -e "$APPLICATION_SECURITY_PROD_PROPERTIES" >> ./src/main/resources/application-security-prod.properties
-          cat ./src/main/resources/application-prod.properties
-          cat ./src/main/resources/database-prod.properties
-          cat ./src/main/resources/application-security-prod.properties
 
       # Gradle wrapper 파일 실행 권한 추가
       - name: Grant execute permission for gradlew
