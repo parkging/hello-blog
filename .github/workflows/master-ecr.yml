@@ -12,13 +12,13 @@ env:
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: prod-blog-backend-group
   ZIP_FILE_NAME: backend/prod/blog-backend
 
-  ECR_REPOSITORY: blog-backend-ecr # set this to your Amazon ECR repository name
-#  ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
-#  ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
-#  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
-#                                               # file, e.g. .aws/task-definition.json
-#  CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
-#                                               # containerDefinitions section of your task definition
+  ECR_REPOSITORY: blog-backend-ecr
+  ECS_SERVICE: blog-backend-service
+  ECS_CLUSTER: blog-backend-cluster02
+  ECS_TASK_DEFINITION: blog-backend-family      # set this to the path to your Amazon ECS task definition
+                                                # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: blog-backend-container        # set this to the name of the container in the
+                                                # containerDefinitions section of your task definition
 
 jobs:
   deploy:
@@ -78,18 +78,21 @@ jobs:
           push: true
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
 
-#      - name: Fill in the new image ID in the Amazon ECS task definition
-#        id: task-def
-#        uses: aws-actions/amazon-ecs-render-task-definition@v1
-#        with:
-#          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-#          container-name: ${{ env.CONTAINER_NAME }}
-#          image: ${{ steps.build-image.outputs.image }}
-#
-#      - name: Deploy Amazon ECS task definition
-#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-#        with:
-#          task-definition: ${{ steps.task-def.outputs.task-definition }}
-#          service: ${{ env.ECS_SERVICE }}
-#          cluster: ${{ env.ECS_CLUSTER }}
-#          wait-for-service-stability: true
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+          codedeploy-appspec: ecr-appspec.yml
+          codedeploy-application: test-code-deploy-application
+          codedeploy-deployment-group: test-code-deploy-deployment-group
