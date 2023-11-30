@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:ap-south-1:122612862532:task-definition/blog-backend-family:2"
+        LoadBalancerInfo:
+          ContainerName: "blog-backend-container"
+          ContainerPort: 8080
