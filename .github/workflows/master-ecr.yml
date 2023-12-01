@@ -77,10 +77,11 @@ jobs:
           push: true
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
       - name: Image digest
         run: |
-          echo ${{ steps.build-image.outputs.imageid }} \
-          echo ${{ steps.build-image.outputs.digest }}
+          IMAGE_ID=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} \
+          echo $IMAGE_ID
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
@@ -88,7 +89,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.imageid }}
+          image: $IMAGE_ID
           environment-variables: |
             BLOG_OP_ENV=prod
             ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY_VALUE }}
