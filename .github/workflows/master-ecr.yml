@@ -78,6 +78,8 @@ jobs:
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+        run: |
+          echo ${{ steps.build-image.outputs.imageid }}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
