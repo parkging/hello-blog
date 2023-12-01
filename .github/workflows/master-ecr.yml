@@ -79,7 +79,8 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
       - name: Image digest
         run: |
-          echo ${{ steps.build-image.outputs.imageid }}
+          echo ${{ steps.build-image.outputs.imageid }} \
+          echo ${{ steps.build-image.outputs.digest }}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
