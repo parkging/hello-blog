@@ -7,27 +7,28 @@ on:
 
 env:
   AWS_REGION: ap-south-1  # 뭄바이
-  S3_BUCKET_NAME: parkging-blog-deploy
-  CODE_DEPLOY_APPLICATION_NAME: prod-blog-backend
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: prod-blog-backend-group
-  ZIP_FILE_NAME: backend/prod/blog-backend
-
   ECR_REPOSITORY: blog-backend-ecr
   ECS_SERVICE: prod-blog-backend-service
   ECS_CLUSTER: prod-blog-backend-cluster
+  CONTAINER_NAME: blog-backend-container
+  CODEDEPLOY_APPSPEC: ecr-appspec.yml
+  CODEDEPLOY_APPLICATION: prod-blog-backend-application
+  CODEDEPLOY_DEPLOYMENT_GROUP: prod-blog-backend-application-group
   ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
-  CONTAINER_NAME: blog-backend-container        # set this to the name of the container in the
-                                                # containerDefinitions section of your task definition
 
 jobs:
   deploy:
-    name: Deploy
+
+    name: Deploy ECS
     runs-on: ubuntu-latest
 
     steps:
+
+      # Source Code Checkout
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Setting AWS Access Credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -62,11 +63,12 @@ jobs:
         run: |
           SPRING_PROFILES_ACTIVE=prod ./gradlew clean build --info --stacktrace
 
-      # ECR Login and Push Docker Image
+      # ECR Login
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      # ECR Build and Push Docker Image
       - name: Build and Push
         id: build-image
         uses: docker/build-push-action@v2
@@ -78,11 +80,13 @@ jobs:
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
 
+      # Setting Image Id to env
       - name: Image digest
         id: image-digest
         run: |
           echo "image=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}" >> $GITHUB_OUTPUT
 
+      # Fill Image Id and env on task definition
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -94,6 +98,7 @@ jobs:
             BLOG_OP_ENV=prod
             ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY_VALUE }}
 
+      # Task Definition Deploy
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
@@ -101,6 +106,6 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-          codedeploy-appspec: ecr-appspec.yml
-          codedeploy-application: prod-blog-backend-application
-          codedeploy-deployment-group: prod-blog-backend-application-group
+          codedeploy-appspec: ${{ env.CODEDEPLOY_APPSPEC }}
+          codedeploy-application: ${{ env.CODEDEPLOY_APPLICATION }}
+          codedeploy-deployment-group: ${{ env.CODEDEPLOY_DEPLOYMENT_GROUP }}
