@@ -1,22 +1,9 @@
 version: 0.0
-os: linux
-files:
-  - source: /
-    destination: /home/ec2-user/blog-backend
-file_exists_behavior: OVERWRITE
-
-permissions:
-  - object: /
-    pattern: "**"
-    owner: ec2-user
-    group: ec2-user
-
-hooks:
-  AfterInstall:
-    - location: stop.sh
-      timeout: 60
-      runas: ec2-user
-  ApplicationStart:
-    - location: start.sh
-      timeout: 180
-      runas: ec2-user
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:ap-south-1:122612862532:task-definition/blog-backend-family:2"
+        LoadBalancerInfo:
+          ContainerName: "blog-backend-container"
+          ContainerPort: 8080
