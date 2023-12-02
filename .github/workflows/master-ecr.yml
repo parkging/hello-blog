@@ -12,8 +12,8 @@ env:
   ECS_CLUSTER: prod-blog-backend-cluster
   CONTAINER_NAME: blog-backend-container
   CODEDEPLOY_APPSPEC: ecr-appspec.yml
-  CODEDEPLOY_APPLICATION: prod-blog-backend-application
-  CODEDEPLOY_DEPLOYMENT_GROUP: prod-blog-backend-application-group
+  CODEDEPLOY_APPLICATION: AppECS-prod-blog-backend-cluster-prod-blog-backend-service
+  CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-prod-blog-backend-cluster-prod-blog-backend-service
   ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
 
 jobs:
