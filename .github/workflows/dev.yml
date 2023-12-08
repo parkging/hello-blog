@@ -3,18 +3,19 @@ name: Build and Deploy Master Branch(ECR Version.)
 on:
   push:
     branches:
-      - master
+      - dev
 
 env:
+  OP_ENV: dev
   AWS_REGION: ap-south-1  # 뭄바이
-  ECR_REPOSITORY: blog-backend-ecr
-  ECS_CLUSTER: prod-blog-backend-cluster
-  ECS_SERVICE: prod-blog-backend-service
-  CONTAINER_NAME: blog-backend-container
-  CODEDEPLOY_APPSPEC: ./aws/prod/prod-prod-appspec.yml
-  CODEDEPLOY_APPLICATION: AppECS-prod-blog-backend-cluster-prod-blog-backend-service
-  CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-prod-blog-backend-cluster-prod-blog-backend-service
-  ECS_TASK_DEFINITION: ./aws/prod/task-definition-prod.json
+  ECR_REPOSITORY: parkging-blog-${{ env.OP_ENV }}-ecr
+  ECS_CLUSTER: parkging-blog-${{ env.OP_ENV }}-ecs-cluster
+  ECS_SERVICE: parkging-blog-${{ env.OP_ENV }}-service
+  CONTAINER_NAME: parkging-blog-${{ env.OP_ENV }}-container
+  CODEDEPLOY_APPSPEC: ./aws/${{ env.OP_ENV }}/appspec.yml
+  CODEDEPLOY_APPLICATION: parkging-blog-${{ env.OP_ENV }}-codedeploy-application
+  CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-${{ env.OP_ENV }}-codedeploy-deployment-group
+  ECS_TASK_DEFINITION: ./aws/${{ env.OP_ENV }}/task-definition.json
 #  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
 
 jobs:
@@ -47,13 +48,13 @@ jobs:
       # Github Repository Secrets를 통해 환경 변수 파일을 생성.
       - name: Generate Environment Variables File for Production
         env:
-          APPLICATION_PROD_PROPERTIES: ${{ secrets.APPLICATION_PROD_PROPERTIES }}
-          DATABASE_PROD_PROPERTIES: ${{ secrets.DATABASE_PROD_PROPERTIES }}
-          APPLICATION_SECURITY_PROD_PROPERTIES: ${{ secrets.APPLICATION_SECURITY_PROD_PROPERTIES }}
+          APPLICATION_DEV_PROPERTIES: ${{ secrets.APPLICATION_DEV_PROPERTIES }}
+          DATABASE_DEV_PROPERTIES: ${{ secrets.DATABASE_DEV_PROPERTIES }}
+          APPLICATION_SECURITY_DEV_PROPERTIES: ${{ secrets.APPLICATION_SECURITY_DEV_PROPERTIES }}
         run: |
-          echo -e "$APPLICATION_PROD_PROPERTIES" >> ./src/main/resources/application-prod.properties
-          echo -e "$DATABASE_PROD_PROPERTIES" >> ./src/main/resources/database-prod.properties
-          echo -e "$APPLICATION_SECURITY_PROD_PROPERTIES" >> ./src/main/resources/application-security-prod.properties
+          echo -e "APPLICATION_DEV_PROPERTIES" >> ./src/main/resources/application-dev.properties
+          echo -e "DATABASE_DEV_PROPERTIES" >> ./src/main/resources/database-dev.properties
+          echo -e "APPLICATION_SECURITY_DEV_PROPERTIES" >> ./src/main/resources/application-security-dev.properties
 
       # Gradle wrapper 파일 실행 권한 추가
       - name: Grant execute permission for gradlew
@@ -62,7 +63,7 @@ jobs:
       # Gradle Build
       - name: Build with Gradle
         run: |
-          SPRING_PROFILES_ACTIVE=prod ./gradlew clean build --info --stacktrace
+          SPRING_PROFILES_ACTIVE=dev ./gradlew clean build --info --stacktrace
 
       # ECR Login
       - name: Login to Amazon ECR
@@ -75,7 +76,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./aws/prod/Dockerfile
+          file: ./aws/${{ env.OP_ENV }}/Dockerfile
           platforms: linux/arm64
           push: true
           tags: |
@@ -96,7 +97,7 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.image-digest.outputs.image }}
           environment-variables: |
-            BLOG_OP_ENV=prod
+            BLOG_OP_ENV=${{ env.OP_ENV }}
             ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY_VALUE }}
 
       # Task Definition Deploy
