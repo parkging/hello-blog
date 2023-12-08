@@ -5,7 +5,7 @@ FROM openjdk:17
 WORKDIR /etc/blog/backend
 
 # Copy the contents of the local build directory to the container
-COPY --chmod=775 ./build/libs /etc/blog/backend/build
+COPY --chmod=775 ../../build/libs /etc/blog/backend/build
 
 # Set environment variable
 ENV BLOG_OP_ENV=${BLOG_OP_ENV} \
