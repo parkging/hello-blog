@@ -11,7 +11,7 @@ env:
   ECS_CLUSTER: prod-blog-backend-cluster
   ECS_SERVICE: prod-blog-backend-service
   CONTAINER_NAME: blog-backend-container
-  CODEDEPLOY_APPSPEC: ./aws/prod/prod-prod-appspec.yml
+  CODEDEPLOY_APPSPEC: ./aws/prod/prod-appspec.yml
   CODEDEPLOY_APPLICATION: AppECS-prod-blog-backend-cluster-prod-blog-backend-service
   CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-prod-blog-backend-cluster-prod-blog-backend-service
   ECS_TASK_DEFINITION: ./aws/prod/prod-task-definition.json
