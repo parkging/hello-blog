@@ -1,4 +1,4 @@
-name: Build and Deploy Master Branch(ECR Version.)
+name: Build and Deploy Master Branch
 
 on:
   push:
@@ -14,13 +14,13 @@ env:
   CODEDEPLOY_APPSPEC: ./aws/prod/prod-prod-appspec.yml
   CODEDEPLOY_APPLICATION: AppECS-prod-blog-backend-cluster-prod-blog-backend-service
   CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-prod-blog-backend-cluster-prod-blog-backend-service
-  ECS_TASK_DEFINITION: ./aws/prod/task-definition-prod.json
-#  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
+  ECS_TASK_DEFINITION: ./aws/prod/prod-task-definition.json
+#  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'prod-task-definition.json' || 'dev-task-definition.json' }}
 
 jobs:
   deploy:
 
-    name: Deploy ECS
+    name: Deploy Prod ECS
     runs-on: ubuntu-latest
 
     steps:

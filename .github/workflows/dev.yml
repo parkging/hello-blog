@@ -1,4 +1,4 @@
-name: Build and Deploy Master Branch(ECR Version.)
+name: Build and Deploy Dev Branch
 
 on:
   push:
@@ -15,13 +15,13 @@ env:
   CODEDEPLOY_APPSPEC: ./aws/dev/appspec.yml
   CODEDEPLOY_APPLICATION: parkging-blog-dev-codedeploy-application
   CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-dev-codedeploy-deployment-group
-  ECS_TASK_DEFINITION: ./aws/dev/task-definition.json
-#  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
+  ECS_TASK_DEFINITION: ./aws/dev/dev-task-definition.json
+#  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'prod-task-definition.json' || 'dev-task-definition.json' }}
 
 jobs:
   deploy:
 
-    name: Deploy ECS
+    name: Deploy Dev ECS
     runs-on: ubuntu-latest
 
     steps:
