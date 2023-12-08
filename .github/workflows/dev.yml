@@ -9,7 +9,7 @@ env:
   OP_ENV: dev
   AWS_REGION: ap-south-1  # 뭄바이
   ECR_REPOSITORY: parkging-blog-dev-ecr
-  ECS_CLUSTER: parkging-blog-dev-ecs-cluster
+  ECS_CLUSTER: parkging-blog-dev-cluster
   ECS_SERVICE: parkging-blog-dev-service
   CONTAINER_NAME: parkging-blog-dev-container
   CODEDEPLOY_APPSPEC: ./aws/dev/dev-appspec.yml
