@@ -14,7 +14,7 @@ env:
   CONTAINER_NAME: parkging-blog-dev-container
   CODEDEPLOY_APPSPEC: ./aws/dev/dev-appspec.yml
   CODEDEPLOY_APPLICATION: parkging-blog-dev-codedeploy-application
-  CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-dev-codedeploy-deployment-group
+  CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-dev-deployment-group
   ECS_TASK_DEFINITION: ./aws/dev/dev-task-definition.json
 #  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'prod-task-definition.json' || 'dev-task-definition.json' }}
 
