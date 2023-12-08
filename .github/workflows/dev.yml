@@ -8,14 +8,14 @@ on:
 env:
   OP_ENV: dev
   AWS_REGION: ap-south-1  # 뭄바이
-  ECR_REPOSITORY: parkging-blog-${{ env.OP_ENV }}-ecr
-  ECS_CLUSTER: parkging-blog-${{ env.OP_ENV }}-ecs-cluster
-  ECS_SERVICE: parkging-blog-${{ env.OP_ENV }}-service
-  CONTAINER_NAME: parkging-blog-${{ env.OP_ENV }}-container
-  CODEDEPLOY_APPSPEC: ./aws/${{ env.OP_ENV }}/appspec.yml
-  CODEDEPLOY_APPLICATION: parkging-blog-${{ env.OP_ENV }}-codedeploy-application
-  CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-${{ env.OP_ENV }}-codedeploy-deployment-group
-  ECS_TASK_DEFINITION: ./aws/${{ env.OP_ENV }}/task-definition.json
+  ECR_REPOSITORY: parkging-blog-dev-ecr
+  ECS_CLUSTER: parkging-blog-dev-ecs-cluster
+  ECS_SERVICE: parkging-blog-dev-service
+  CONTAINER_NAME: parkging-blog-dev-container
+  CODEDEPLOY_APPSPEC: ./aws/dev/appspec.yml
+  CODEDEPLOY_APPLICATION: parkging-blog-dev-codedeploy-application
+  CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-dev-codedeploy-deployment-group
+  ECS_TASK_DEFINITION: ./aws/dev/task-definition.json
 #  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'task-definition-prod.json' || 'task-definition-dev.json' }}
 
 jobs:
