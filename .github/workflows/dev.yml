@@ -52,9 +52,9 @@ jobs:
           DATABASE_DEV_PROPERTIES: ${{ secrets.DATABASE_DEV_PROPERTIES }}
           APPLICATION_SECURITY_DEV_PROPERTIES: ${{ secrets.APPLICATION_SECURITY_DEV_PROPERTIES }}
         run: |
-          echo -e "APPLICATION_DEV_PROPERTIES" >> ./src/main/resources/application-dev.properties
-          echo -e "DATABASE_DEV_PROPERTIES" >> ./src/main/resources/database-dev.properties
-          echo -e "APPLICATION_SECURITY_DEV_PROPERTIES" >> ./src/main/resources/application-security-dev.properties
+          echo -e "$APPLICATION_DEV_PROPERTIES" >> ./src/main/resources/application-dev.properties
+          echo -e "$DATABASE_DEV_PROPERTIES" >> ./src/main/resources/database-dev.properties
+          echo -e "$APPLICATION_SECURITY_DEV_PROPERTIES" >> ./src/main/resources/application-security-dev.properties
 
       # Gradle wrapper 파일 실행 권한 추가
       - name: Grant execute permission for gradlew
@@ -92,13 +92,16 @@ jobs:
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
+        env:
+          BLOG_OP_ENV: ${{ env.OP_ENV }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY_VALUE }}
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.image-digest.outputs.image }}
           environment-variables: |
-            BLOG_OP_ENV=${{ env.OP_ENV }}
-            ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY_VALUE }}
+            BLOG_OP_ENV=$BLOG_OP_ENV
+            ENCRYPTION_KEY=$ENCRYPTION_KEY
 
       # Task Definition Deploy
       - name: Deploy Amazon ECS task definition
