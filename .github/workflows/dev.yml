@@ -7,6 +7,7 @@ on:
 
 env:
   OP_ENV: dev
+  ENCRYPTION_KEY_VALUE: ${{ secrets.DEV_ENCRYPTION_KEY_VALUE }}
   AWS_REGION: ap-south-1  # 뭄바이
   ECR_REPOSITORY: parkging-blog-dev-ecr
   ECS_CLUSTER: parkging-blog-dev-cluster
@@ -98,7 +99,7 @@ jobs:
           image: ${{ steps.image-digest.outputs.image }}
           environment-variables: |
             BLOG_OP_ENV=${{ env.OP_ENV }}
-            ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY_VALUE }}
+            ENCRYPTION_KEY=${{ env.ENCRYPTION_KEY_VALUE }}
 
       # Task Definition Deploy
       - name: Deploy Amazon ECS task definition
