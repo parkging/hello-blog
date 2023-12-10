@@ -46,16 +46,16 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      # Github Repository Secrets를 통해 환경 변수 파일을 생성.
-      - name: Generate Environment Variables File for Production
-        env:
-          APPLICATION_DEV_PROPERTIES: ${{ secrets.APPLICATION_DEV_PROPERTIES }}
-          DATABASE_DEV_PROPERTIES: ${{ secrets.DATABASE_DEV_PROPERTIES }}
-          APPLICATION_SECURITY_DEV_PROPERTIES: ${{ secrets.APPLICATION_SECURITY_DEV_PROPERTIES }}
-        run: |
-          echo -e "$APPLICATION_DEV_PROPERTIES" >> ./src/main/resources/application-dev.properties
-          echo -e "$DATABASE_DEV_PROPERTIES" >> ./src/main/resources/database-dev.properties
-          echo -e "$APPLICATION_SECURITY_DEV_PROPERTIES" >> ./src/main/resources/application-security-dev.properties
+#      # Github Repository Secrets를 통해 환경 변수 파일을 생성.
+#      - name: Generate Environment Variables File for Production
+#        env:
+#          APPLICATION_DEV_PROPERTIES: ${{ secrets.APPLICATION_DEV_PROPERTIES }}
+#          DATABASE_DEV_PROPERTIES: ${{ secrets.DATABASE_DEV_PROPERTIES }}
+#          APPLICATION_SECURITY_DEV_PROPERTIES: ${{ secrets.APPLICATION_SECURITY_DEV_PROPERTIES }}
+#        run: |
+#          echo -e "$APPLICATION_DEV_PROPERTIES" >> ./src/main/resources/application-dev.properties
+#          echo -e "$DATABASE_DEV_PROPERTIES" >> ./src/main/resources/database-dev.properties
+#          echo -e "$APPLICATION_SECURITY_DEV_PROPERTIES" >> ./src/main/resources/application-security-dev.properties
 
       # Gradle wrapper 파일 실행 권한 추가
       - name: Grant execute permission for gradlew
