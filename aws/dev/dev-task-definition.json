@@ -1,6 +1,6 @@
 {
-  "taskRoleArn": "arn:aws:iam::122612862532:role/ecs-task-roll",
-  "executionRoleArn": "arn:aws:iam::122612862532:role/ecs-task-roll",
+  "taskRoleArn": "arn:aws:iam::122612862532:role/dev-ecs-execution-role",
+  "executionRoleArn": "arn:aws:iam::122612862532:role/dev-ecs-execution-role",
   "containerDefinitions": [
     {
       "name": "parkging-blog-dev-container",
