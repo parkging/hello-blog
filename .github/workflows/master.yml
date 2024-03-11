@@ -7,13 +7,13 @@ on:
 
 env:
   AWS_REGION: ap-south-1  # 뭄바이
-  ECR_REPOSITORY: blog-backend-ecr
-  ECS_CLUSTER: prod-blog-backend-cluster
-  ECS_SERVICE: prod-blog-backend-service
-  CONTAINER_NAME: blog-backend-container
+  ECR_REPOSITORY: parkging-blog-prod-ecr
+  ECS_CLUSTER: parkging-blog-prod-cluster
+  ECS_SERVICE: parkging-blog-prod-service
+  CONTAINER_NAME: parkging-blog-prod-container
   CODEDEPLOY_APPSPEC: ./aws/prod/prod-appspec.yml
-  CODEDEPLOY_APPLICATION: AppECS-prod-blog-backend-cluster-prod-blog-backend-service
-  CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-prod-blog-backend-cluster-prod-blog-backend-service
+  CODEDEPLOY_APPLICATION: parkging-blog-prod-codedeploy-application
+  CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-prod-deployment-group
   ECS_TASK_DEFINITION: ./aws/prod/prod-task-definition.json
 #  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'prod-task-definition.json' || 'dev-task-definition.json' }}
 
@@ -33,8 +33,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       # Java Setting
