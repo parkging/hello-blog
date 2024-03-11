@@ -3,7 +3,7 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: "arn:aws:ecs:ap-south-1:122612862532:task-definition/blog-backend-family:3"
+        TaskDefinition: "arn:aws:ecs:ap-south-1:122612862532:task-definition/parkging-blog-prod-family:1"
         LoadBalancerInfo:
-          ContainerName: "blog-backend-container"
+          ContainerName: "parkging-blog-prod-container"
           ContainerPort: 8080
