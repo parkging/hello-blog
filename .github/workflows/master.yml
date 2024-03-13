@@ -97,7 +97,7 @@ jobs:
           image: ${{ steps.image-digest.outputs.image }}
           environment-variables: |
             BLOG_OP_ENV=prod
-            ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY_VALUE }}
+            ENCRYPTION_KEY=${{ secrets.PROD_ENCRYPTION_KEY_VALUE }}
 
       # Task Definition Deploy
       - name: Deploy Amazon ECS task definition
