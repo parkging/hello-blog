@@ -1,5 +1,3 @@
--- V3__create_post_table.sql
--- Create post table
 CREATE TABLE post (
                       post_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                       title VARCHAR(255) NOT NULL,
@@ -14,6 +12,5 @@ CREATE TABLE post (
                       FOREIGN KEY (member_id) REFERENCES member(member_id)
 );
 
--- Indexes for performance optimization
 CREATE INDEX idx_post_category_id ON post (post_category_id);
 CREATE INDEX idx_member_id ON post (member_id);
