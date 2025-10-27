@@ -1,6 +1,11 @@
 {
+<<<<<<<< HEAD:aws/dev/dev-task-definition.json
   "taskRoleArn": "arn:aws:iam::122612862532:role/dev-ecs-execution-role",
   "executionRoleArn": "arn:aws:iam::122612862532:role/dev-ecs-execution-role",
+========
+  "taskRoleArn": "arn:aws:iam::122612862532:role/prod-ecs-execution-role",
+  "executionRoleArn": "arn:aws:iam::122612862532:role/prod-ecs-execution-role",
+>>>>>>>> dc066e8 (add dev settings):aws/prod/prod-task-definition.json
   "containerDefinitions": [
     {
       "name": "parkging-blog-dev-container",

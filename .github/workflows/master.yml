@@ -7,13 +7,32 @@ on:
 
 env:
   AWS_REGION: ap-south-1  # 뭄바이
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 25ee24b (Feature/add prod settings (#107))
   ECR_REPOSITORY: parkging-blog-prod-ecr
   ECS_CLUSTER: parkging-blog-prod-cluster
   ECS_SERVICE: parkging-blog-prod-service
   CONTAINER_NAME: parkging-blog-prod-container
+<<<<<<< HEAD
   CODEDEPLOY_APPSPEC: ./aws/prod/prod-appspec.yml
   CODEDEPLOY_APPLICATION: parkging-blog-prod-codedeploy-application
   CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-prod-deployment-group
+=======
+  ECR_REPOSITORY: blog-backend-ecr
+  ECS_CLUSTER: prod-blog-backend-cluster
+  ECS_SERVICE: prod-blog-backend-service
+  CONTAINER_NAME: blog-backend-container
+  CODEDEPLOY_APPSPEC: ./aws/prod/prod-appspec.yml
+  CODEDEPLOY_APPLICATION: AppECS-prod-blog-backend-cluster-prod-blog-backend-service
+  CODEDEPLOY_DEPLOYMENT_GROUP: DgpECS-prod-blog-backend-cluster-prod-blog-backend-service
+>>>>>>> dc066e8 (add dev settings)
+=======
+  CODEDEPLOY_APPSPEC: ./aws/prod/prod-appspec.yml
+  CODEDEPLOY_APPLICATION: parkging-blog-prod-codedeploy-application
+  CODEDEPLOY_DEPLOYMENT_GROUP: parkging-blog-prod-deployment-group
+>>>>>>> 25ee24b (Feature/add prod settings (#107))
   ECS_TASK_DEFINITION: ./aws/prod/prod-task-definition.json
 #  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/master' && 'prod-task-definition.json' || 'dev-task-definition.json' }}
 

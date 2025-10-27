@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "taskRoleArn": "arn:aws:iam::122612862532:role/prod-ecs-execution-role",
   "executionRoleArn": "arn:aws:iam::122612862532:role/prod-ecs-execution-role",
   "containerDefinitions": [
@@ -9,6 +10,26 @@
       "portMappings": [
         {
           "name": "parkging-blog-prod-container-8080-tcp",
+<<<<<<< HEAD
+=======
+<<<<<<<< HEAD:aws/dev/dev-task-definition.json
+  "taskRoleArn": "arn:aws:iam::122612862532:role/dev-ecs-execution-role",
+  "executionRoleArn": "arn:aws:iam::122612862532:role/dev-ecs-execution-role",
+========
+  "taskRoleArn": "arn:aws:iam::122612862532:role/prod-ecs-execution-role",
+  "executionRoleArn": "arn:aws:iam::122612862532:role/prod-ecs-execution-role",
+>>>>>>>> dc066e8 (add dev settings):aws/prod/prod-task-definition.json
+  "containerDefinitions": [
+    {
+      "name": "parkging-blog-dev-container",
+      "image": "Will be replaced by github action",
+      "essential": true,
+      "portMappings": [
+        {
+          "name": "parkging-blog-dev-container-8080-tcp",
+>>>>>>> dc066e8 (add dev settings)
+=======
+>>>>>>> 25ee24b (Feature/add prod settings (#107))
           "containerPort": 8080,
           "hostPort": 8080,
           "protocol": "tcp",
@@ -19,7 +40,15 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-create-group": "true",
+<<<<<<< HEAD
+<<<<<<< HEAD
           "awslogs-group": "/ecs/parkging-blog-prod-family",
+=======
+          "awslogs-group": "/ecs/parkging-blog-dev-container",
+>>>>>>> dc066e8 (add dev settings)
+=======
+          "awslogs-group": "/ecs/parkging-blog-prod-family",
+>>>>>>> 25ee24b (Feature/add prod settings (#107))
           "awslogs-region": "ap-south-1",
           "awslogs-stream-prefix": "ecs"
         },
@@ -44,6 +73,16 @@
   "requiresCompatibilities": ["FARGATE"],
   "networkMode": "awsvpc",
   "cpu": "256",
+<<<<<<< HEAD
+<<<<<<< HEAD
   "memory": "512",
   "family": "parkging-blog-prod-family"
+=======
+  "memory": "1024",
+  "family": "parkging-blog-dev-family"
+>>>>>>> dc066e8 (add dev settings)
+=======
+  "memory": "512",
+  "family": "parkging-blog-prod-family"
+>>>>>>> 25ee24b (Feature/add prod settings (#107))
 }
